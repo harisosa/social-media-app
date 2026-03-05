@@ -1,25 +1,35 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { AuthUser } from "../types";
 
-type AuthState = {
+export type AuthState = {
   accessToken: string | null;
+  user: AuthUser | null;
 };
 
 const initialState: AuthState = {
   accessToken: null,
+  user: null,
 };
 
-const authSlice = createSlice({
+type SetSessionPayload = {
+  token: string;
+  user: AuthUser;
+};
+
+export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAccessToken: (state, action: PayloadAction<string | null>) => {
-      state.accessToken = action.payload;
+    setSession: (state, action: PayloadAction<SetSessionPayload>) => {
+      state.accessToken = action.payload.token;
+      state.user = action.payload.user;
     },
-    logout: (state) => {
+    clearSession: (state) => {
       state.accessToken = null;
+      state.user = null;
     },
   },
 });
 
-export const { setAccessToken, logout } = authSlice.actions;
-export default authSlice.reducer;
+export const { setSession, clearSession } = authSlice.actions;
+export const authReducer = authSlice.reducer;

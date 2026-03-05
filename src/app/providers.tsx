@@ -1,19 +1,16 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { Provider as ReduxProvider } from "react-redux";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/query/client";
-import { store } from "@/lib/store";
+import { Provider } from "react-redux"
+import { PersistGate } from "redux-persist/integration/react"
 
-type ProvidersProps = {
-  children: React.ReactNode;
-};
+import { store, persistor } from "@/lib/store"
 
-export const Providers = ({ children }: ProvidersProps) => {
+export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
-    <ReduxProvider store={store}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </ReduxProvider>
-  );
-};
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        {children}
+      </PersistGate>
+    </Provider>
+  )
+}
