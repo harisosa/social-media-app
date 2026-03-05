@@ -1,6 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { store } from "@/lib/store";
-import { ApiError } from "./error";
+import { ApiError } from "./errors";
 import { getMessage } from "./message";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
