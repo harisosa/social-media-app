@@ -1,4 +1,4 @@
-import { TimelineComponent } from "@/features/timeline/ui/TimelineComponent";
+import { TimelineComponent } from "@/features/timeline";
 import React from "react";
 
 

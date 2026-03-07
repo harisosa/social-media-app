@@ -1,20 +1,4 @@
-export type TimelineAuthor = {
-  id: number
-  username: string
-  name: string
-  avatarUrl: string | null
-}
-
-export type TimelinePost = {
-  id: number
-  imageUrl: string
-  caption: string
-  createdAt: string
-  author: TimelineAuthor
-  likeCount: number
-  commentCount: number
-  likedByMe: boolean
-}
+import { PostModel } from "@/features/post/types"
 
 export type TimelinePagination = {
   page: number
@@ -24,7 +8,7 @@ export type TimelinePagination = {
 }
 
 export type TimelineResponse = {
-  items: TimelinePost[]
+  items: PostModel[]
   pagination: TimelinePagination
 }
 

@@ -7,6 +7,7 @@ import type { NavbarProps } from "../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
+import { getInitials } from "@/lib/utils";
 
 export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
     return (
@@ -39,12 +40,12 @@ export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
                         >
                             <Avatar className="size-9">
                                 <AvatarImage src={user.avatarUrl ?? ""} alt={user.name} />
-                                <AvatarFallback>
-                                    {user.name?.slice(0, 2).toUpperCase()}
+                                <AvatarFallback className="text-">
+                                    {getInitials(user.name)}
                                 </AvatarFallback>
                             </Avatar>
 
-                            <span className="text-[18px] font-semibold leading-none text-white">
+                            <span className="text-md font-semibold leading-none text-white">
                                 {user.name}
                             </span>
                         </Link>

@@ -1,5 +1,5 @@
-import { BottomNav } from "@/features/navbar/ui/ButtomNav"
-import { Navbar } from "@/features/navbar/ui/Navbar"
+import { BottomNav, Navbar } from "@/features/navbar/components"
+
 
 export default function MainLayout({
   children,

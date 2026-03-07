@@ -19,8 +19,8 @@ export const BottomNav = () => {
   const activeKey = getActiveKey(pathname)
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
-      <div className="flex items-center gap-8 rounded-full border border-neutral-800 bg-neutral-950 px-6 py-3 shadow-xl">
+    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 ">
+      <div className="flex items-center gap-11.25 rounded-full border border-neutral-800 bg-neutral-950 shadow-xl w-90 px-2.75 py-4.25">
 
         {NAV_ITEMS.map((item) => {
           const isCreate = item.key === "create"
@@ -35,7 +35,7 @@ export const BottomNav = () => {
                   isActive ? "bg-[#7751F9]" : "bg-neutral-800"
                 }`}
               >
-                <Image src={item.icon} alt="Create" width={22} height={22} />
+                <Image src={item.icon} alt="Create" width={24} height={24} />
               </button>
             )
           }
@@ -44,11 +44,11 @@ export const BottomNav = () => {
             <button
               key={item.key}
               onClick={() => router.push(item.href)}
-              className={`flex flex-col items-center gap-1 text-sm ${
+              className={`flex flex-col items-center justify-center gap-1 text-sm w-23.5 h-14.5  ${
                 isActive ? "text-[#7751F9]" : "text-primary-200 hover:text-white"
               }`}
             >
-              <Image src={item.icon} alt={item.label} width={18} height={18} />
+              <Image src={item.icon} alt={item.label} width={24} height={24} />
               <span className="text-xs">{item.label}</span>
             </button>
           )

@@ -1,17 +1,31 @@
-import type { TimelinePost } from "../types"
-import { TimelineCard } from "./TimelineCard"
+import type { PostModel } from "@/features/post/types"
+
+import { TimelinePostItem } from "../components/TimelinePostItem"
 
 type TimelineListProps = {
-  posts: TimelinePost[]
+  posts: PostModel[]
+  onOpenLikes: (postId: number) => void
+  onOpenComments: (postId: number) => void
+  onShare: (postId: number) => void
 }
 
-export const TimelineList = ({ posts }: TimelineListProps) => {
+export const TimelineList = ({
+  posts,
+  onOpenLikes,
+  onOpenComments,
+  onShare,
+}: TimelineListProps) => {
   return (
-    <div className="mx-auto flex w-full flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-140 flex-col gap-6 px-4 sm:px-5 md:gap-8 md:px-6">
       {posts.map((post) => (
-        <TimelineCard key={post.id} post={post} />
+        <TimelinePostItem
+          key={post.id}
+          post={post}
+          onOpenLikes={onOpenLikes}
+          onOpenComments={onOpenComments}
+          onShare={onShare}
+        />
       ))}
     </div>
   )
 }
-
