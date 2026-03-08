@@ -20,7 +20,7 @@ export const PostHeader = ({
   return (
     <header className="flex items-center">
       <div className="flex min-w-0 items-center gap-3">
-        <Avatar className="h-10 w-10 shrink-0">
+        <Avatar className="h-11 w-11 shrink-0">
           <AvatarImage
             src={author.avatarUrl ?? undefined}
             alt={author.name}
@@ -34,7 +34,7 @@ export const PostHeader = ({
 
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <p className="truncate text-sm font-semibold leading-none text-white">
+            <p className="truncate text-sm font-bold leading-none text-white">
               {author.name}
             </p>
 
@@ -43,7 +43,7 @@ export const PostHeader = ({
             </span>
           </div>
 
-          <p className="mt-1 text-xs leading-none text-neutral-400">
+          <p className="mt-1 text-xs font-normal leading-none text-neutral-400">
             {timeAgo}
           </p>
         </div>

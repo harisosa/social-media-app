@@ -6,13 +6,13 @@ import { Search } from "lucide-react";
 import type { NavbarProps } from "../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
-import { Container } from "@/components/ui/container";
 import { getInitials } from "@/lib/utils";
+import { Container } from "@/components/ui/container";
 
 export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
     return (
         <header className="fixed z-150 w-full hidden border-b border-[#181D27] bg-black md:block">
-            <Container>
+            <Container size="navbar">
                 <div className="flex h-20 items-center justify-between gap-6">
                     <Link href="/" aria-label="Go to homepage" className="relative shrink-0 w-34.25 h-9">
                         <Image src='/images/logo.svg' alt="socialy" fill />
@@ -67,7 +67,7 @@ export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
                         </div>
                     )}
                 </div>
-            </Container>
+                </Container>
         </header>
     );
 };

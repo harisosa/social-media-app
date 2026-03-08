@@ -30,5 +30,6 @@ export const useGetPostLikesInfinite = ({
       const { page, totalPages } = lastPage.pagination
       return page >= totalPages? undefined : page + 1
     },
+    staleTime: 1000 * 60,
   })
 }

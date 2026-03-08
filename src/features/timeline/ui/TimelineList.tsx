@@ -1,6 +1,8 @@
 import type { PostModel } from "@/features/post/types"
 
 import { TimelinePostItem } from "../components/TimelinePostItem"
+import { Separator } from "@/components/ui/separator"
+
 
 type TimelineListProps = {
   posts: PostModel[]
@@ -16,15 +18,19 @@ export const TimelineList = ({
   onShare,
 }: TimelineListProps) => {
   return (
-    <div className="mx-auto flex w-full max-w-140 flex-col gap-6 px-4 sm:px-5 md:gap-8 md:px-6">
+    <div className="flex w-full flex-col gap-4">
       {posts.map((post) => (
-        <TimelinePostItem
-          key={post.id}
+        <div key={post.id}>
+                <TimelinePostItem
+          
           post={post}
           onOpenLikes={onOpenLikes}
           onOpenComments={onOpenComments}
           onShare={onShare}
         />
+        <Separator className="w-full mt-4" />
+        </div>
+
       ))}
     </div>
   )

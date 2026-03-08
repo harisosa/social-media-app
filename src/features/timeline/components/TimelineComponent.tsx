@@ -7,6 +7,7 @@ import { TimelineEmptyState } from "../ui/TimelineEmptyState"
 import { TimelineList } from "../ui/TimelineList"
 import { TimelineErrorState, TimelineListSkeleton } from "@/features/timeline/ui"
 import { LikesDialog } from "@/features/post/components"
+import { Container } from "@/components/ui/container"
 
 
 export const TimelineComponent = () => {
@@ -74,7 +75,7 @@ export const TimelineComponent = () => {
 
   if (isPending) {
     return (
-      <section className="w-full py-4">
+      <section>
         <TimelineListSkeleton />
       </section>
     )
@@ -82,7 +83,7 @@ export const TimelineComponent = () => {
 
   if (isError) {
     return (
-      <section className="w-full py-4">
+      <section>
         <TimelineErrorState
           message={
             error instanceof Error
@@ -100,7 +101,7 @@ export const TimelineComponent = () => {
 
   if (!posts.length) {
     return (
-      <section className="w-full py-4">
+      <section>
         <TimelineEmptyState />
       </section>
     )
@@ -108,7 +109,8 @@ export const TimelineComponent = () => {
 
   return (
     <>
-      <section className="w-full py-4">
+      <section>
+        <Container size="timeline">
         <TimelineList
           posts={posts}
           onOpenLikes={handleOpenLikes}
@@ -123,6 +125,7 @@ export const TimelineComponent = () => {
             Loading more posts...
           </div>
         )}
+        </Container>
       </section>
 
       {

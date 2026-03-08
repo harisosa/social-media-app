@@ -15,9 +15,11 @@ export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
 
     return (
 
-        <header className="border-b border-[#181D27] bg-black md:hidden">
-            <Container>
-                <div className="flex h-14 items-center justify-between">
+        <header className="fixed w-full z-50 border-b border-[#181D27] bg-black md:hidden">
+            <Container size="navbar">
+
+
+                <div className="flex h-16 items-center justify-between">
                     <Link href="/" aria-label="Go to homepage" className="relative shrink-0 w-34.25 h-9">
                         <Image src='/images/logo.svg' alt="socialy" fill />
                     </Link>

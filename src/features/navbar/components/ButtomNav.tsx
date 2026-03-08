@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useRouter, usePathname } from "next/navigation"
 
 import { NAV_ITEMS } from "@/features/navbar/constants"
+import { Container } from "@/components/ui/container"
 
 const getActiveKey = (pathname: string) => {
   if (pathname === "/" || pathname.startsWith("/timeline")) return "home"
@@ -19,8 +20,9 @@ export const BottomNav = () => {
   const activeKey = getActiveKey(pathname)
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 ">
-      <div className="flex items-center gap-11.25 rounded-full border border-neutral-800 bg-neutral-950 shadow-xl w-90 px-2.75 py-4.25">
+    <div className="fixed bottom-6 w-full">
+      <Container size="bottomNavbar">
+      <div className="flex items-center gap-11.25 rounded-full border border-neutral-800 bg-neutral-950 shadow-xl justify-center px-2.75 py-4.25 w-full">
 
         {NAV_ITEMS.map((item) => {
           const isCreate = item.key === "create"
@@ -55,6 +57,8 @@ export const BottomNav = () => {
         })}
 
       </div>
+      </Container>
+
     </div>
   )
 }

@@ -41,11 +41,11 @@ export const PostActions = ({
             aria-label="Like post"
             disabled={isLikePending}
             onClick={onLike}
-            className="h-9 w-9 rounded-full p-0 text-white hover:bg-transparent hover:opacity-80 disabled:opacity-60"
           >
             <Heart
-              size={22}
+
               className={cn(
+                'size-6',
                 likedByMe && "fill-[#B41759] text-[#B41759]"
               )}
             />
@@ -55,7 +55,7 @@ export const PostActions = ({
             variant="ghost"
             type="button"
             onClick={onOpenLikes}
-            className="h-auto px-0 py-0 text-sm font-medium leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80"
+            className="h-auto px-0 py-0 text-sm font-semibold leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80"
           >
             {likeCount}
           </Button>
@@ -68,16 +68,15 @@ export const PostActions = ({
             type="button"
             aria-label="Open comments"
             onClick={onOpenComments}
-            className="h-9 w-9 rounded-full p-0 text-white hover:bg-transparent hover:opacity-80"
           >
-            <MessageCircle size={22} />
+            <MessageCircle className="size-6"/>
           </Button>
 
           <Button
             variant="ghost"
             type="button"
             onClick={onOpenComments}
-            className="h-auto px-0 py-0 text-sm font-medium leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80"
+            className="h-auto px-0 py-0 text-sm font-semibold leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80"
           >
             {commentCount}
           </Button>
@@ -89,9 +88,8 @@ export const PostActions = ({
           type="button"
           aria-label="Share post"
           onClick={onShare}
-          className="h-9 w-9 rounded-full p-0 text-white hover:bg-transparent hover:opacity-80"
         >
-          <Send size={21} />
+          <Send className="'ize-6" />
         </Button>
       </div>
 
@@ -102,11 +100,9 @@ export const PostActions = ({
         aria-label="Save post"
         disabled={isSavePending}
         onClick={onSave}
-        className="h-9 w-9 rounded-full p-0 text-white hover:bg-transparent hover:opacity-80 disabled:opacity-60"
       >
         <Bookmark
-          size={21}
-          className={cn(isSaved && "fill-white text-white")}
+          className={cn('size-6',isSaved && "fill-white text-white")}
         />
       </Button>
     </div>
