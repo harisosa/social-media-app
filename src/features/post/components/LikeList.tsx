@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 
 import { useFollowUser } from "@/features/follow/hooks"
 import { useGetPostLikesInfinite } from "@/features/post/hooks"
+import { UserRow } from "@/features/user/ui"
 import { getInitials } from "@/lib/utils"
-import { CheckCircle, CheckCircle2 } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
 
 type LikesListProps = {
     open: boolean
@@ -69,27 +70,7 @@ export const LikesList = ({
                                     key={user.id}
                                     className="flex items-center justify-between gap-3 rounded-2xl px-2 py-2"
                                 >
-                                    <div className="flex min-w-0 items-center gap-3">
-                                        <Avatar className="h-12 w-12 shrink-0">
-                                            <AvatarImage
-                                                src={user.avatarUrl ?? undefined}
-                                                alt={user.name}
-                                                className="object-cover"
-                                            />
-                                            <AvatarFallback className="bg-neutral-800 text-xs font-semibold text-white">
-                                                {initials}
-                                            </AvatarFallback>
-                                        </Avatar>
-
-                                        <div className="min-w-0">
-                                            <p className="truncate text-sm font-bold leading-none text-white">
-                                                {user.name}
-                                            </p>
-                                            <p className="mt-1 truncate text-sm font-normal leading-none text-[#8C93A1]">
-                                                {user.username}
-                                            </p>
-                                        </div>
-                                    </div>
+                                    <UserRow user={user} />
 
                                     {!user.isMe ? (
                                         user.isFollowedByMe ? (

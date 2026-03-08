@@ -1,19 +1,10 @@
-import type { ApiResponse } from "@/lib/http/types";
-
-export type AuthUser = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
-  avatarUrl: string | null;
-};
+import { User } from "@/features/user/types";
 
 export type AuthToken = string;
 
 export type AuthData = {
   token: AuthToken;
-  user: AuthUser;
+  user: User;
 };
 export type LoginPayload = {
   email: string;

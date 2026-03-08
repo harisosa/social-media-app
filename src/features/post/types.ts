@@ -1,3 +1,6 @@
+import { User } from "@/features/user/types";
+import { Pagination } from "@/types";
+
 export type PostModel = {
   id: number;
   imageUrl: string;
@@ -17,26 +20,15 @@ export type TimelineAuthor = {
   avatarUrl: string | null;
 };
 
-export type PostLikesUser = {
-  id: number;
-  username: string;
-  name: string;
-  avatarUrl: string | null;
+export type PostLikesUser = User &{
   isFollowedByMe: boolean;
   isMe: boolean;
   followsMe: boolean;
 };
 
-export type PostLikesPagination = {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-};
-
 export type PostLikesData = {
   users: PostLikesUser[];
-  pagination: PostLikesPagination;
+  pagination: Pagination;
 };
 
 export type TogglePostLikeData = {

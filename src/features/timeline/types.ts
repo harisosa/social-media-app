@@ -1,15 +1,9 @@
 import { PostModel } from "@/features/post/types"
-
-export type TimelinePagination = {
-  page: number
-  limit: number
-  total: number
-  totalPages: number
-}
+import { Pagination } from "@/types"
 
 export type TimelineResponse = {
   items: PostModel[]
-  pagination: TimelinePagination
+  pagination: Pagination
 }
 
 export type GetTimelineParams = {
