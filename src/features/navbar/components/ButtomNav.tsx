@@ -22,7 +22,7 @@ export const BottomNav = () => {
   return (
     <div className="fixed bottom-6 w-full">
       <Container size="bottomNavbar">
-      <div className="flex items-center gap-11.25 rounded-full border border-neutral-800 bg-neutral-950 shadow-xl justify-center px-2.75 py-4.25 w-full">
+      <div className="flex items-center gap-11.25 rounded-full border border-neutral-800 bg-neutral-950 shadow-xl justify-between lg:justify-center px-2.75 py-4.25 w-full">
 
         {NAV_ITEMS.map((item) => {
           const isCreate = item.key === "create"
