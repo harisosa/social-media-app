@@ -3,7 +3,7 @@
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { timelineQueryKeys } from "@/features/timeline/queryKeys"
-import type { TimelineResponse } from "@/features/timeline/types"
+import type { GetPostResponse } from "@/features/timeline/types"
 import { TogglePostLikeData } from "@/features/post/types"
 import { likePost, unlikePost } from "@/features/post/api"
 
@@ -14,7 +14,7 @@ type TogglePostLikeParams = {
 
 type TogglePostLikeContext = {
   previousTimelineQueries: Array<
-    [readonly unknown[], InfiniteData<TimelineResponse> | undefined]
+    [readonly unknown[], InfiniteData<GetPostResponse> | undefined]
   >
 }
 
@@ -41,11 +41,11 @@ export const useTogglePostLike = () => {
       })
 
       const previousTimelineQueries =
-        queryClient.getQueriesData<InfiniteData<TimelineResponse>>({
+        queryClient.getQueriesData<InfiniteData<GetPostResponse>>({
           queryKey: timelineQueryKeys.all,
         })
 
-      queryClient.setQueriesData<InfiniteData<TimelineResponse>>(
+      queryClient.setQueriesData<InfiniteData<GetPostResponse>>(
         {
           queryKey: timelineQueryKeys.all,
         },

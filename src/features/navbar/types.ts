@@ -1,4 +1,5 @@
-import { AuthUser } from "@/features/auth";
+
+import { User } from "@/features/user/types";
 import { StaticImageData } from "next/image";
 
 export type NavbarUser = {
@@ -9,7 +10,7 @@ export type NavbarUser = {
 
 export type NavbarProps = {
   isAuthenticated: boolean;
-  user?: AuthUser | null;
+  user?: User | null;
 };
 
 export type NavItem = {

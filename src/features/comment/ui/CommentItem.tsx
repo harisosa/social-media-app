@@ -2,7 +2,6 @@ import * as React from "react"
 
 import { UserRow } from "@/features/user/ui"
 import { User } from "@/features/user/types"
-import { formatTimeAgo } from "@/lib/utils"
 import { Caption } from "@/components/ui/caption"
 
 type CommentItemProps = {

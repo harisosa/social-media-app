@@ -2,7 +2,7 @@
 
 import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query"
 import { timelineQueryKeys } from "@/features/timeline/queryKeys"
-import type { TimelineResponse } from "@/features/timeline/types"
+import type { GetPostResponse } from "@/features/timeline/types"
 import { TogglePostSaveData } from "@/features/post/types"
 import { savePost, unsavePost } from "@/features/post/api"
 
@@ -13,7 +13,7 @@ type TogglePostSaveParams = {
 
 type TogglePostSaveContext = {
   previousTimelineQueries: Array<
-    [readonly unknown[], InfiniteData<TimelineResponse> | undefined]
+    [readonly unknown[], InfiniteData<GetPostResponse> | undefined]
   >
 }
 
@@ -40,11 +40,11 @@ export const useTogglePostSave = () => {
       })
 
       const previousTimelineQueries =
-        queryClient.getQueriesData<InfiniteData<TimelineResponse>>({
+        queryClient.getQueriesData<InfiniteData<GetPostResponse>>({
           queryKey: timelineQueryKeys.all,
         })
 
-      queryClient.setQueriesData<InfiniteData<TimelineResponse>>(
+      queryClient.setQueriesData<InfiniteData<GetPostResponse>>(
         {
           queryKey: timelineQueryKeys.all,
         },

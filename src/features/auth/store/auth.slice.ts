@@ -1,9 +1,10 @@
+import { User } from "@/features/user/types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { AuthUser } from "../types";
+
 
 export type AuthState = {
   accessToken: string | null;
-  user: AuthUser | null;
+  user: User | null;
 };
 
 const initialState: AuthState = {
@@ -13,7 +14,7 @@ const initialState: AuthState = {
 
 type SetSessionPayload = {
   token: string;
-  user: AuthUser;
+  user: User;
 };
 
 export const authSlice = createSlice({
