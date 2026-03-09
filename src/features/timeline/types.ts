@@ -1,7 +1,7 @@
 import { PostModel } from "@/features/post/types"
 import { Pagination } from "@/types"
 
-export type TimelineResponse = {
+export type GetPostResponse = {
   items: PostModel[]
   pagination: Pagination
 }

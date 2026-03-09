@@ -1,19 +1,17 @@
-"use client"
+'use client'
 
-import { useEffect, useRef } from "react"
+import { Container } from '@/components/ui/container'
+import { TimelineErrorState, TimelineListSkeleton } from '@/features/timeline/ui'
+import { openOverlay } from '@/features/ui/store'
+import { useAppDispatch } from '@/lib/hook'
+import { useInfiniteScroll } from '@/hooks'
 
-import { useTimelineInfinite } from "../hooks/useTimelineInfinite"
-import { TimelineEmptyState } from "../ui/TimelineEmptyState"
-import { TimelineList } from "../ui/TimelineList"
-import { TimelineErrorState, TimelineListSkeleton } from "@/features/timeline/ui"
-import { openOverlay } from "@/features/ui/store"
-import { Container } from "@/components/ui/container"
-import { useAppDispatch } from "@/lib/hook"
-
+import { useTimelineInfinite } from '../hooks/useTimelineInfinite'
+import { TimelineEmptyState } from '../ui/TimelineEmptyState'
+import { TimelineList } from '../ui/TimelineList'
 
 export const TimelineComponent = () => {
   const dispatch = useAppDispatch()
-  const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
   const {
     data,
@@ -26,48 +24,25 @@ export const TimelineComponent = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useTimelineInfinite({
-    limit: 20,
+    limit: 5,
   })
 
-  const posts = data?.pages.flatMap((page) => page.items) ?? []
+  const posts = data?.pages.flatMap(page => page.items) ?? []
 
-  useEffect(() => {
-    if (!hasNextPage || isFetchingNextPage) {
-      return
-    }
-
-    const element = loadMoreRef.current
-
-    if (!element) {
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0]
-
-        if (entry?.isIntersecting) {
-          void fetchNextPage()
-        }
-      },
-      {
-        rootMargin: "200px",
-      }
-    )
-
-    observer.observe(element)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
+  const { sentinelRef } = useInfiniteScroll({
+    enabled: Boolean(hasNextPage) && !isFetchingNextPage,
+    onLoadMore: () => {
+      void fetchNextPage()
+    },
+    rootMargin: '200px',
+  })
 
   const handleOpenLikes = (postId: number) => {
     dispatch(
       openOverlay({
-        type: "likes",
+        type: 'likes',
         payload: { postId },
-        size:'md'
+        size: 'md',
       })
     )
   }
@@ -75,15 +50,15 @@ export const TimelineComponent = () => {
   const handleOpenComments = (postId: number) => {
     dispatch(
       openOverlay({
-        type: "post-detail",
+        type: 'post-detail',
         payload: { postId },
-        size:'lg'
+        size: 'lg',
       })
     )
   }
 
   const handleShare = (postId: number) => {
-    console.log("share post", postId)
+    console.log('share post', postId)
   }
 
   if (isPending) {
@@ -101,7 +76,7 @@ export const TimelineComponent = () => {
           message={
             error instanceof Error
               ? error.message
-              : "Something went wrong while loading posts."
+              : 'Something went wrong while loading posts.'
           }
           onRetry={() => {
             void refetch()
@@ -130,13 +105,13 @@ export const TimelineComponent = () => {
           onShare={handleShare}
         />
 
-        {hasNextPage && <div ref={loadMoreRef} className="h-10 w-full" />}
+        {hasNextPage ? <div ref={sentinelRef} className="h-10 w-full" /> : null}
 
-        {isFetchingNextPage && (
+        {isFetchingNextPage ? (
           <div className="flex justify-center py-6 text-sm text-neutral-400">
             Loading more posts...
           </div>
-        )}
+        ) : null}
       </Container>
     </section>
   )

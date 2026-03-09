@@ -1,5 +1,5 @@
 import { User } from "@/features/user/types"
-import { Pagination } from "@/types"
+import { Pagination, PaginationParams } from "@/types"
 
 export type PostComment = {
   id: number
@@ -20,8 +20,6 @@ export type CreateCommentPayload = {
   text: string
 }
 
-export type GetPostCommentsParams = {
+export type GetPostCommentsParams = PaginationParams & {
   postId: number
-  page: number
-  limit: number
 }
