@@ -14,12 +14,11 @@ type UsePostLikesInfiniteParams = {
 export const useGetPostLikesInfinite = ({
   postId,
   limit = 20,
-  enabled = true,
 }: UsePostLikesInfiniteParams) => {
   return useInfiniteQuery<PostLikesData>({
     queryKey: postQueryKeys.likesInfinite(postId, limit),
     initialPageParam: 1,
-    enabled,
+    enabled: !!postId,
     queryFn: ({ pageParam }) =>
       getPostLikes({
         postId,

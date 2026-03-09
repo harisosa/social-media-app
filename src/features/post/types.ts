@@ -6,19 +6,24 @@ export type PostModel = {
   imageUrl: string;
   caption: string;
   createdAt: string;
-  author: TimelineAuthor;
+  author: User;
   likeCount: number;
   commentCount: number;
   likedByMe: boolean;
   isSaved: boolean;
 };
 
-export type TimelineAuthor = {
-  id: number;
-  username: string;
-  name: string;
-  avatarUrl: string | null;
-};
+export type PostDetail = {
+  id: number
+  imageUrl: string
+  caption: string
+  createdAt: string
+  author: User
+  likeCount: number
+  commentCount: number
+  likedByMe: boolean
+  isSaved: boolean;
+}
 
 export type PostLikesUser = User &{
   isFollowedByMe: boolean;

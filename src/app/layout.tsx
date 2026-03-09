@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppProviders } from "@/app/providers";
 import { Toaster } from "@/components/ui/sonner";
+import { OverlayContainer } from "@/features/ui/store/components";
 
 export const metadata: Metadata = {
   title: "Sociality",
@@ -16,8 +17,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <AppProviders>{children}</AppProviders>
-         <Toaster position="top-right" />
+        <AppProviders>
+          {children}
+
+          <OverlayContainer />
+        </AppProviders>
+        <Toaster position="top-right" />
+
       </body>
     </html>
   );

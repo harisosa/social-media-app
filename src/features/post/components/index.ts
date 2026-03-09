@@ -1,2 +1,2 @@
-export * from './LikeDialog';
 export * from './LikeList';
+export * from './PostDetail';

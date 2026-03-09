@@ -1,6 +1,5 @@
 "use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 
 import { useFollowUser } from "@/features/follow/hooks"
@@ -8,18 +7,13 @@ import { useGetPostLikesInfinite } from "@/features/post/hooks"
 import { UserRow } from "@/features/user/ui"
 import { getInitials } from "@/lib/utils"
 import { CheckCircle2 } from "lucide-react"
+import React from "react"
 
 type LikesListProps = {
-    open: boolean
     postId: number
-    title?: string
 }
 
-export const LikesList = ({
-    open,
-    postId,
-    title = "Likes",
-}: LikesListProps) => {
+export const LikesList: React.FC<LikesListProps> = ({postId}) => {
     const {
         data,
         isPending,
@@ -30,7 +24,6 @@ export const LikesList = ({
     } = useGetPostLikesInfinite({
         postId,
         limit: 20,
-        enabled: open && !!postId,
     })
 
     const followMutation = useFollowUser()
@@ -38,9 +31,9 @@ export const LikesList = ({
     const users = data?.pages.flatMap((page) => page.users) ?? []
 
     return (
-        <>
+        <div className="p-5">
             <div className="px-2 pb-3">
-                <h2 className="text-base font-semibold text-white">{title}</h2>
+                <h2 className="text-base font-semibold text-white">Likes</h2>
             </div>
 
             <div className="max-h-105 overflow-y-auto">
@@ -125,6 +118,6 @@ export const LikesList = ({
                     </div>
                 )}
             </div>
-        </>
+        </div>
     )
 }

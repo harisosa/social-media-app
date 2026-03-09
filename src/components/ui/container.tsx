@@ -20,7 +20,7 @@ const paddingMap = {
     px-[18px] sm:px-6 md:px-10 lg:px-20 xl:px-124 2xl:px-140 3xl:px-160
   `,
   bottomNavbar: `
-    px-6 sm:px-50 md:px-70 lg:px-100 xl:px-135 2xl:px-135 3xl:px-135
+    px-6 sm:px-40 md:px-50 lg:px-100 xl:px-135 2xl:px-135 3xl:px-135
     `,
 } as const;
 

@@ -1,17 +1,18 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 import { useTimelineInfinite } from "../hooks/useTimelineInfinite"
 import { TimelineEmptyState } from "../ui/TimelineEmptyState"
 import { TimelineList } from "../ui/TimelineList"
 import { TimelineErrorState, TimelineListSkeleton } from "@/features/timeline/ui"
-import { LikesDialog } from "@/features/post/components"
+import { openOverlay } from "@/features/ui/store"
 import { Container } from "@/components/ui/container"
+import { useAppDispatch } from "@/lib/hook"
 
 
 export const TimelineComponent = () => {
-  const [likesPostId, setLikesPostId] = useState<number | null>(null)
+  const dispatch = useAppDispatch()
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
   const {
@@ -62,11 +63,23 @@ export const TimelineComponent = () => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage])
 
   const handleOpenLikes = (postId: number) => {
-    setLikesPostId(postId)
+    dispatch(
+      openOverlay({
+        type: "likes",
+        payload: { postId },
+        size:'md'
+      })
+    )
   }
 
   const handleOpenComments = (postId: number) => {
-    console.log("open comments", postId)
+    dispatch(
+      openOverlay({
+        type: "post-detail",
+        payload: { postId },
+        size:'lg'
+      })
+    )
   }
 
   const handleShare = (postId: number) => {
@@ -108,9 +121,8 @@ export const TimelineComponent = () => {
   }
 
   return (
-    <>
-      <section>
-        <Container size="timeline">
+    <section>
+      <Container size="timeline">
         <TimelineList
           posts={posts}
           onOpenLikes={handleOpenLikes}
@@ -125,23 +137,7 @@ export const TimelineComponent = () => {
             Loading more posts...
           </div>
         )}
-        </Container>
-      </section>
-
-      {
-        likesPostId && (
-          <LikesDialog
-            open={likesPostId !== null}
-            postId={likesPostId}
-            onOpenChange={(open) => {
-              if (!open) {
-                setLikesPostId(null)
-              }
-            }}
-          />
-        )
-      }
-
-    </>
+      </Container>
+    </section>
   )
 }

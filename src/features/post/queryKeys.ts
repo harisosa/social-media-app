@@ -12,4 +12,5 @@ export const postQueryKeys = {
 
   savedInfinite: (limit: number) =>
     [...POSTS, "saved", "infinite", { limit }] as const,
+  detail: (postId: number) => [...POSTS, "detail", postId] as const,
 }

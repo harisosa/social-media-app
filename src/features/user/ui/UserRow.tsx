@@ -2,16 +2,17 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User } from "@/features/user/types"
-import { getInitials, cn } from "@/lib/utils"
+import { getInitials, cn, formatTimeAgo } from "@/lib/utils"
 
 
 type UserRowProps = {
   user: User
-  className?: string
-  onClick?: (id: number) => void
+  className?: string;
+  onClick?: (id: number) => void;
+  timePost?: string;
 }
 
-export const UserRow = ({ user, className, onClick }: UserRowProps) => {
+export const UserRow = ({ user, className, onClick, timePost }: UserRowProps) => {
   const initials = getInitials(user.name)
 
   return (
@@ -23,8 +24,8 @@ export const UserRow = ({ user, className, onClick }: UserRowProps) => {
 
     >
       <Avatar className="h-12 w-12 shrink-0"
-            onClick={() => onClick && onClick(user.id)}
-            >
+        onClick={() => onClick && onClick(user.id)}
+      >
         <AvatarImage
           src={user.avatarUrl ?? undefined}
           alt={user.name}
@@ -37,15 +38,25 @@ export const UserRow = ({ user, className, onClick }: UserRowProps) => {
 
       <div className="min-w-0">
         <p className="truncate text-sm font-bold leading-none text-white"
-              onClick={() => onClick && onClick(user.id)}
+          onClick={() => onClick && onClick(user.id)}
         >
           {user.name}
         </p>
-        <p className="mt-1 truncate text-sm font-normal leading-none text-[#8C93A1]"
-              onClick={() => onClick && onClick(user.id)}
-        >
-          {user.username}
-        </p>
+        {timePost ?
+
+          (
+            <p className="mt-2 text-xs text-neutral-500">
+              {formatTimeAgo(timePost)}
+            </p>
+
+          )
+          :
+          (<p className="mt-1 truncate text-sm font-normal leading-none text-[#8C93A1]">
+            {user.username}
+          </p>
+          )
+        }
+
       </div>
     </div>
   )

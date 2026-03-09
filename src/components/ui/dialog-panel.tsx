@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { X } from "lucide-react"
 
 import {
@@ -11,7 +12,7 @@ import {
 
 import { cn } from "@/lib/utils"
 
-type DialogPanelSize = "sm" | "md" | "lg"
+export type DialogPanelSize = "sm" | "md" | "lg"
 
 type DialogPanelProps = {
   open: boolean
@@ -20,12 +21,14 @@ type DialogPanelProps = {
   description?: string
   size?: DialogPanelSize
   children: React.ReactNode
+  contentClassName?: string
+  panelClassName?: string
 }
 
 const sizeMap: Record<DialogPanelSize, string> = {
-  sm: "max-w-85",
-  md: "max-w-124",
-  lg: "max-w-[640px]",
+  sm: "lg:max-w-85",
+  md: "lg:max-w-124",
+  lg: "lg:max-w-[1200px]",
 }
 
 export const DialogPanel = ({
@@ -35,58 +38,42 @@ export const DialogPanel = ({
   description,
   size = "md",
   children,
+  contentClassName,
+  panelClassName,
 }: DialogPanelProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="overflow-visible border-none bg-transparent p-0 shadow-none"
+        className={cn(
+          "overflow-visible border-none bg-transparent p-0 shadow-none w-full max-w-[calc(100%-2rem)]",
+          sizeMap[size],
+          contentClassName
+        )}
       >
-        {title && <DialogTitle className="sr-only">{title}</DialogTitle>}
+        {title ? <DialogTitle className="sr-only">{title}</DialogTitle> : null}
 
-        {description && (
+        {description ? (
           <DialogDescription className="sr-only">
             {description}
           </DialogDescription>
-        )}
+        ) : null}
 
         <button
           type="button"
           onClick={() => onOpenChange(false)}
           aria-label="Close dialog"
-          className="
-            absolute
-            right-0
-            -top-11.25
-            z-10
-            inline-flex
-            h-10
-            w-10
-            items-center
-            justify-center
-            rounded-full
-            bg-transparent
-            text-white/70
-            transition
-          "
+          className="absolute right-0 -top-11.25 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-white/70 transition hover:text-white"
         >
           <X className="size-6" />
         </button>
 
         <div
           className={cn(
-            `
-            w-[calc(100vw-32px)]
-            rounded-3xl
-            border border-[#181D27]
-            bg-[#0A0D12]
-            px-3
-            pb-4
-            pt-5
-            text-white
-            shadow-[0_20px_80px_rgba(0,0,0,0.5)]
-            `,
-            sizeMap[size]
+            "w-[calc(100vw-32px)] text-white shadow-[0_20px_80px_rgba(0,0,0,0.5)]",
+            "rounded-3xl border border-[#181D27] bg-[#0A0D12]",
+            sizeMap[size],
+            panelClassName
           )}
         >
           {children}
