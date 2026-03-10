@@ -65,7 +65,7 @@ export const CreatePostForm = ({
         type="button"
         disabled={isSubmitDisabled}
         onClick={handleSubmit}
-        className="h-11 rounded-full bg-[#7751F9] text-sm font-semibold text-white hover:bg-[#6a45ea] disabled:cursor-not-allowed disabled:opacity-50"
+        className="h-11 rounded-full cursor-pointer bg-[#7751F9] text-sm font-semibold text-white hover:bg-[#6a45ea] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? 'Sharing...' : 'Share'}
       </Button>

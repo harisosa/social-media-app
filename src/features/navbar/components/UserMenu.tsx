@@ -75,7 +75,7 @@ export const NavbarUserMenu = ({ user }: NavbarUserMenuProps) => {
         <DropdownMenuItem
           onClick={() => logoutMutation.mutate()}
           disabled={logoutMutation.isPending}
-          className="h-16 cursor-pointer px-5 text-[#F04438] focus:bg-[#1D2432] focus:text-[#F04438]"
+          className="h-16 cursor-pointer px-5 text-[#F04438] focus:bg-[#1D2432] focus:text-[#F04438] cursor-pointer"
         >
           <div className="flex items-center gap-3">
             <LogOut size={18} className="text-[#98A2B3]" />

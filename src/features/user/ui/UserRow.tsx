@@ -23,7 +23,7 @@ export const UserRow = ({ user, className, onClick, timePost }: UserRowProps) =>
       )}
 
     >
-      <Avatar className="h-12 w-12 shrink-0"
+      <Avatar className="h-12 w-12 shrink-0 cursor-pointer"
         onClick={() => onClick && onClick(user.username)}
       >
         <AvatarImage
@@ -37,7 +37,7 @@ export const UserRow = ({ user, className, onClick, timePost }: UserRowProps) =>
       </Avatar>
 
       <div className="min-w-0">
-        <p className="truncate text-sm font-bold leading-none text-white"
+        <p className="truncate text-sm font-bold leading-none text-white cursor-pointer"
           onClick={() => onClick && onClick(user.username)}
         >
           {user.name}

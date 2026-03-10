@@ -27,7 +27,7 @@ export const Caption: React.FC<{ caption: string, className?: string }> = ({ cap
           variant="ghost"
           type="button"
           onClick={() => setIsExpanded((prev) => !prev)}
-          className="ml-2 inline h-auto px-0 py-0 text-sm font-medium text-neutral-400 hover:bg-transparent hover:text-white"
+          className="ml-2 inline h-auto px-0 py-0 text-sm font-medium text-neutral-400 hover:bg-transparent hover:text-white text-left cursor-pointer"
         >
           {isExpanded ? "less" : "more"}
         </Button>

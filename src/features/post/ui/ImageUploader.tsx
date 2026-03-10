@@ -56,8 +56,11 @@ export const ImageUploader = ({
     handleFile(event.dataTransfer.files?.[0])
   }
 
-  const handleClick = () => {
-    inputRef.current?.click()
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLLabelElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      inputRef.current?.click()
+    }
   }
 
   return (
@@ -65,18 +68,12 @@ export const ImageUploader = ({
       <label
         role="button"
         tabIndex={0}
-        onClick={handleClick}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault()
-            handleClick()
-          }
-        }}
+        onKeyDown={handleKeyDown}
         className={cn(
-          'flex min-h-[132px] w-full cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed bg-[#030712] px-4 py-6 text-center transition-colors',
+          'flex min-h-33 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed bg-[#030712] px-4 py-6 text-center transition-colors',
           'border-[#1F2937]',
           'hover:border-[#7751F9] hover:bg-[#060b16]',
           'focus:outline-none focus-visible:border-[#7751F9]',

@@ -132,7 +132,7 @@ export const CommentTextbox: React.FC<CommentTextboxProps> = ({
           variant="ghost"
           disabled={!canSubmit}
           onClick={handleSubmit}
-          className="absolute right-2 top-1/2 h-8 -translate-y-1/2 rounded-full px-3 text-sm font-medium text-[#7751F9] hover:bg-transparent hover:text-[#8B6BFA] disabled:text-neutral-600"
+          className="absolute  cursor-pointer right-2 top-1/2 h-8 -translate-y-1/2 rounded-full px-3 text-sm font-medium text-[#7751F9] hover:bg-transparent hover:text-[#8B6BFA] disabled:text-neutral-600"
         >
           Post
         </Button>

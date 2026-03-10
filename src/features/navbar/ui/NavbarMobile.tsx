@@ -61,7 +61,7 @@ export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
                   type="button"
                   aria-label="Open search"
                   onClick={handleOpenSearch}
-                  className="inline-flex items-center justify-center text-white"
+                  className="inline-flex items-center justify-center text-white cursor-pointer"
                 >
                   <Search size={20} strokeWidth={2} />
                 </button>
@@ -82,7 +82,7 @@ export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
                     type="button"
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     onClick={() => setIsMenuOpen((prev) => !prev)}
-                    className="inline-flex items-center justify-center text-white"
+                    className="inline-flex items-center justify-center text-white cursor-pointer"
                   >
                     {isMenuOpen ? (
                       <X size={22} strokeWidth={2} />
@@ -138,7 +138,7 @@ export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
                     type="button"
                     aria-label="Clear search"
                     onClick={() => setQuery("")}
-                    className="absolute right-3 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-full bg-[#1F2430] text-[#98A2B3]"
+                    className="absolute right-3 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-full bg-[#1F2430] text-[#98A2B3] cursor-pointer"
                   >
                     <X size={12} strokeWidth={2.5} />
                   </button>
@@ -149,7 +149,7 @@ export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
                 type="button"
                 aria-label="Close search"
                 onClick={handleCloseSearch}
-                className="inline-flex shrink-0 items-center justify-center text-white"
+                className="inline-flex shrink-0 items-center justify-center text-white cursor-pointer" 
               >
                 <X size={22} strokeWidth={2} />
               </button>

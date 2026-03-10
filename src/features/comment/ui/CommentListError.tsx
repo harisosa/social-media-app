@@ -33,7 +33,7 @@ export const CommentListError: React.FC<PostCommentsErrorProps> = ({
         size="icon"
         onClick={onRetry}
         disabled={isRetrying}
-        className="h-8 w-8 shrink-0 rounded-full text-neutral-300 hover:bg-white/5 hover:text-white disabled:text-neutral-600"
+        className="h-8 w-8 shrink-0 rounded-full text-neutral-300 hover:bg-white/5 hover:text-white disabled:text-neutral-600 cursor-pointer"
         aria-label="Retry loading comments"
       >
         <RotateCw className={cn("size-4", isRetrying && "animate-spin")} />

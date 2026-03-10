@@ -63,7 +63,7 @@ export const DialogPanel = ({
           type="button"
           onClick={() => onOpenChange(false)}
           aria-label="Close dialog"
-          className="absolute right-0 -top-11.25 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-white/70 transition hover:text-white"
+          className="cursor-pointer absolute right-0 -top-11.25 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-white/70 transition hover:text-white"
         >
           <X className="size-6" />
         </button>

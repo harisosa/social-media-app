@@ -55,7 +55,7 @@ export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
                     type="button"
                     aria-label="Clear search"
                     onClick={() => setQuery("")}
-                    className="absolute right-3 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-full bg-[#1F2430] text-[#98A2B3] transition hover:text-white"
+                    className="absolute right-3 top-1/2 inline-flex size-5 -translate-y-1/2 items-center justify-center rounded-full bg-[#1F2430] text-[#98A2B3] transition hover:text-white cursor-pointer"
                   >
                     <X size={12} strokeWidth={2.5} />
                   </button>

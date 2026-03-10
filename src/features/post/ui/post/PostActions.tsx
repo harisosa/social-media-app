@@ -55,7 +55,7 @@ export const PostActions = ({
             variant="ghost"
             type="button"
             onClick={onOpenLikes}
-            className="h-auto px-0 py-0 text-sm font-semibold leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80"
+            className="h-auto px-0 py-0 text-sm font-semibold leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80 cursor-pointer"
           >
             {likeCount}
           </Button>

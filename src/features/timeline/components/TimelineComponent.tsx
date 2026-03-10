@@ -1,5 +1,6 @@
 'use client'
 
+import { Container } from '@/components/ui/container'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import {  selectIsAuthenticated } from '@/features/auth'
 import { ExploreComponent } from '@/features/timeline/components/ExploreComponent'
@@ -14,7 +15,7 @@ export const TimelineComponent = () => {
   if(!isAuthenticated) return <ExploreComponent />
 
   return (
-    <section className="flex flex-col items-center gap-6">
+    <Container size='timeline' className="flex flex-col items-center gap-6">
       <Tabs defaultValue="feed" className="w-full">
         <TabsList className="mx-auto flex w-fit items-center gap-6 bg-transparent p-0">
           
@@ -58,6 +59,6 @@ export const TimelineComponent = () => {
           <ExploreComponent />
         </TabsContent>
       </Tabs>
-    </section>
+    </Container>
   )
 }

@@ -1,12 +1,10 @@
 'use client'
 
-import { Container } from '@/components/ui/container'
 import { TimelineErrorState, TimelineListSkeleton } from '@/features/timeline/ui'
 import { openOverlay } from '@/features/ui/store'
 import { useAppDispatch } from '@/lib/hook'
 import { useInfiniteScroll } from '@/hooks'
 
-import { useTimelineInfinite } from '../hooks/useTimelineInfinite'
 import { TimelineEmptyState } from '../ui/TimelineEmptyState'
 import { TimelineList } from '../ui/TimelineList'
 import { LIMIT_PAGE } from '@/constants'
@@ -98,8 +96,7 @@ export const ExploreComponent = () => {
   }
 
   return (
-    <section>
-      <Container size="timeline">
+    <section  className='flex flex-col justify-center w-full'>
         <TimelineList
           posts={posts}
           onOpenLikes={handleOpenLikes}
@@ -114,7 +111,6 @@ export const ExploreComponent = () => {
             Loading more posts...
           </div>
         ) : null}
-      </Container>
     </section>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { LIMIT_PAGE } from '@/constants'
 import { getExplorePosts } from '@/features/timeline/api'
 import { timelineQueryKeys } from '@/features/timeline/queryKeys'
 import { GetPostResponse } from '@/features/timeline/types'
@@ -9,29 +10,22 @@ type UseFeedPostsInfiniteParams = {
   limit?: number
 }
 
-const DEFAULT_LIMIT = 20
 
 export const useExplorePostsInfinite = ({
-  limit = DEFAULT_LIMIT,
+  limit = LIMIT_PAGE,
 }: UseFeedPostsInfiniteParams = {}) => {
-  return useInfiniteQuery<GetPostResponse>({
-    queryKey: timelineQueryKeys.exploreInfinite(limit),
-    initialPageParam: 1,
-    staleTime: 1000 * 30,
-    queryFn: ({ pageParam }) =>
-      getExplorePosts({
-        page: Number(pageParam),
-        limit,
-      }),
-    getNextPageParam: lastPage => {
-      const { page, totalPages } = lastPage.pagination
-
-      if (page >= totalPages) {
-        return undefined
-      }
-
-      return page + 1
-    },
-  }
-)
+  return useInfiniteQuery({
+      queryKey: timelineQueryKeys.exploreInfinite(limit),
+      initialPageParam: 1,
+      staleTime: 1000 * 30,
+      queryFn: ({ pageParam }) =>
+        getExplorePosts({
+          page: pageParam,
+          limit,
+        }),
+      getNextPageParam: (lastPage: GetPostResponse) => {
+        const { page, totalPages } = lastPage.pagination
+        return page < totalPages ? page + 1 : undefined
+      },
+    })
 }

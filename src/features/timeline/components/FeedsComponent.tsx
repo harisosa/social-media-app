@@ -57,7 +57,11 @@ export const FeedsComponent = () => {
       })
     )
   }
-
+console.log('feed', {
+  hasNextPage,
+  isFetchingNextPage,
+  pages: data?.pages,
+})
   const handleShare = (postId: number) => {
     console.log('share post', postId)
   }
@@ -97,8 +101,7 @@ export const FeedsComponent = () => {
   }
 
   return (
-    <section>
-      <Container size="timeline">
+    <section className='flex flex-col justify-center w-full'>
         <TimelineList
           posts={posts}
           onOpenLikes={handleOpenLikes}
@@ -113,7 +116,6 @@ export const FeedsComponent = () => {
             Loading more posts...
           </div>
         ) : null}
-      </Container>
     </section>
   )
 }

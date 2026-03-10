@@ -70,7 +70,7 @@ export const ImagePreview = ({
           type="button"
           variant="ghost"
           onClick={onRemove}
-          className="h-9 rounded-full px-4 text-[#F43F5E] hover:bg-[#F43F5E]/10 hover:text-[#F43F5E]"
+          className="h-9 rounded-full px-4 text-[#F43F5E] hover:bg-[#F43F5E]/10 hover:text-[#F43F5E] cursor-pointer"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Image

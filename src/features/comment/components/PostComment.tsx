@@ -75,7 +75,8 @@ export const PostComments: React.FC<PostCommentsProps> = ({
   }
 
   return (
-    <div className={cn('flex min-h-80 flex-col lg:h-full', className)}>
+    <div className={cn('flex min-h-80 flex-col lg:h-full gap-4', className)}>
+      <h2 className='text-md font-[700]'>Comments</h2>
       <div ref={scrollContainerRef} className="flex-1 ">
         <div className="space-y-4 overflow-auto  h-115 ">
           <CommentList comments={comments} />
