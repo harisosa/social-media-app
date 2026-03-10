@@ -23,6 +23,8 @@ export const BottomNav = () => {
   const lastScroll = useRef(0)
   const [hidden, setHidden] = useState(false)
 
+ 
+
   useEffect(() => {
     const handleScroll = () => {
       const current = window.pageYOffset
@@ -42,7 +44,7 @@ export const BottomNav = () => {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
-
+ if(pathname === "/profile/edit") return;
   return (
     <div
       className={`fixed bottom-6 left-0 z-50 w-full transition-transform duration-300 ${

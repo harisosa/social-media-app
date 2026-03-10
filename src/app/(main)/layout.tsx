@@ -15,7 +15,7 @@ export default function MainLayout({
   return (
     <>
       <Navbar />
-      <main className={isProfilePage ? "" : "pt-20 lg:pt-35"}>{children}</main>
+      <main className={isProfilePage ? "lg:pt-35" : "pt-20 lg:pt-35"}>{children}</main>
       <BottomNav />
     </>
   )

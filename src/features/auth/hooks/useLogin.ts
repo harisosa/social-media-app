@@ -6,7 +6,6 @@ import { login } from "@/features/auth/api";
 import { useAppDispatch } from "@/lib/hook";
 import { useRouter } from "next/navigation";
 import { setSession } from "@/features/auth/store";
-import { toast } from "sonner";
 import { ApiError } from "@/lib/http";
 import { appToast } from "@/lib/toast";
 
@@ -21,7 +20,6 @@ export const useLogin = () => {
       dispatch(
         setSession({
           token: res.token,
-          user: res.user,
         }),
       );
       router.push("/timeline");

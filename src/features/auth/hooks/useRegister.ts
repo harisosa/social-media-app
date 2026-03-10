@@ -8,7 +8,6 @@ import { ApiError } from "@/lib/http";
 import { appToast } from "@/lib/toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 export const useRegister = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +20,6 @@ export const useRegister = () => {
       dispatch(
         setSession({
           token: res.token,
-          user: res.user,
         }),
       );
 

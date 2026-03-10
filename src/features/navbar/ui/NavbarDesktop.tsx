@@ -6,17 +6,20 @@ import { Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import type { NavbarProps } from "../types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Container } from "@/components/ui/container";
-import { getInitials } from "@/lib/utils";
 import { useDebounce } from "@/lib/useDebounce";
 import { SearchUsersPanel } from "@/features/user/components";
+import { NavbarUserMenu } from "@/features/navbar/components/UserMenu";
+
 
 export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
 
-  const shouldOpenSearch = useMemo(() => debouncedQuery.trim().length > 0, [debouncedQuery]);
+  const shouldOpenSearch = useMemo(
+    () => debouncedQuery.trim().length > 0,
+    [debouncedQuery],
+  );
 
   return (
     <header className="fixed z-150 hidden w-full border-b border-[#181D27] bg-black md:block">
@@ -68,20 +71,7 @@ export const NavbarDesktop = ({ isAuthenticated, user }: NavbarProps) => {
           </div>
 
           {isAuthenticated && user ? (
-            <Link
-              href="/profile"
-              className="flex shrink-0 items-center gap-3"
-              aria-label="Open profile"
-            >
-              <Avatar className="size-9">
-                <AvatarImage src={user.avatarUrl ?? ""} alt={user.name} />
-                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-              </Avatar>
-
-              <span className="text-md font-semibold leading-none text-white">
-                {user.name}
-              </span>
-            </Link>
+            <NavbarUserMenu user={user} />
           ) : (
             <div className="flex shrink-0 items-center gap-4">
               <Link

@@ -1,16 +1,14 @@
 "use client"
 
-import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query"
-
-
-import { selectAuthUser } from "@/features/auth/store"
+import { InfiniteData, useMutation } from "@tanstack/react-query"
 
 import type { PostDetail } from "@/features/post/types"
 import { PostComment, PostCommentsResponse } from "@/features/comment/types"
-import { useAppSelector } from "@/lib/hook"
 import { createComment } from "@/features/comment/api.ts/api"
 import { commentsQueryKeys } from "@/features/comment/queryKeys"
 import { postQueryKeys } from "@/features/post/queryKeys"
+import { queryClient } from "@/lib/query"
+import { useMyProfile } from "@/features/user/hooks"
 
 
 type MutationContext = {
@@ -19,9 +17,8 @@ type MutationContext = {
 }
 
 export const useCreateComment = (postId: number, limit: number = 10) => {
-  const queryClient = useQueryClient()
-  const authUser = useAppSelector(selectAuthUser)
-
+  const {data : profile} =  useMyProfile();
+  const authUser = profile?.profile;
   return useMutation<PostComment, Error, string, MutationContext>({
     mutationFn: (text) =>
       createComment({

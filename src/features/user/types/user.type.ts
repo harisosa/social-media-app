@@ -53,3 +53,11 @@ export type UserProfileResponse = User &{
   isMe: boolean;
   counts: ProfileStats
 }
+
+export interface UpdateProfilePayload {
+  name?: string
+  username?: string
+  phone?:string
+  bio?: string
+  avatar?: File | null
+}

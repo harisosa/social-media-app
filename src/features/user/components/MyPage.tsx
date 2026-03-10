@@ -9,6 +9,8 @@ import GridIcon from '@/../public/icons/grid.svg';
 import SaveIcon from '@/../public/icons/save.svg';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/lib/hook'
+import { openOverlay } from '@/features/ui/store'
 
 
 const PROFILE_TABS: ProfileTabItem[] = [
@@ -19,7 +21,7 @@ const PROFILE_TABS: ProfileTabItem[] = [
 export const MyProfileComponent = () => {
   const route = useRouter();
   const [activeTab, setActiveTab] = useState<ProfileTabKey>('gallery')
-
+  const dispatch = useAppDispatch()
   const profileQuery = useMyProfile()
   const postsQuery = useMyPostsInfinite({ limit: 9 })
   const savedPostsQuery = useMySavedPostsInfinite({ page: 1, limit: 9 })
@@ -55,7 +57,7 @@ export const MyProfileComponent = () => {
   const activeQuery = activeTab === 'gallery' ? postsQuery : savedPostsQuery
 
   const handleEditProfile = () => {
-    console.log('edit profile')
+    route.push('/profile/edit')
   }
 
   const handleShareProfile = () => {
@@ -63,7 +65,13 @@ export const MyProfileComponent = () => {
   }
 
   const handleItemClick = (id: number) => {
-    console.log('open post detail', id)
+       dispatch(
+         openOverlay({
+           type: 'post-detail',
+           payload: { postId: id },
+           size: 'lg',
+         })
+       )
   }
 
   return (

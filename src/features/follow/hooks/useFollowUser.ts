@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import {
   getUserProfileFollowSnapshot,
@@ -10,6 +10,7 @@ import {
 } from '@/features/follow/hooks/follow-cache'
 import { followUser, unfollowUser } from '@/features/follow/api'
 import { postQueryKeys } from '@/features/post/queryKeys'
+import { queryClient } from '@/lib/query'
 
 type FollowUserInput = {
   userId: number
@@ -18,7 +19,6 @@ type FollowUserInput = {
 }
 
 export const useFollowUser = () => {
-  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async ({ username, following }: FollowUserInput) => {

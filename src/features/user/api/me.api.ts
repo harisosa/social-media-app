@@ -1,5 +1,5 @@
 import { api } from "@/lib/http"
-import type { MyProfileResponse, SearchUsersParams, SearchUsersResponse } from "../types"
+import { User, type MyProfileResponse, type SearchUsersParams, type SearchUsersResponse, type UpdateProfilePayload } from "../types"
 import { GetPostResponse } from "@/features/timeline/types"
 import { PaginationParams } from "@/types"
 
@@ -45,5 +45,26 @@ export const getMySavedPosts = async ({
       page,
       limit,
     },
+  })
+}
+
+
+export const updateProfile = async (payload: UpdateProfilePayload) => {
+  const formData = new FormData()
+
+  if (payload.name) formData.append('name', payload.name)
+  if (payload.username) formData.append('username', payload.username)
+  if (payload.phone) formData.append('name', payload.phone)
+  if (payload.bio) formData.append('bio', payload.bio)
+  
+
+  if (payload.avatar) {
+    formData.append('avatar', payload.avatar)
+  }
+
+  return api<User>({
+    method: 'PATCH',
+    url: '/me',
+    data: formData,
   })
 }
