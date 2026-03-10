@@ -9,6 +9,7 @@ import { useInfiniteScroll } from '@/hooks'
 import { useTimelineInfinite } from '../hooks/useTimelineInfinite'
 import { TimelineEmptyState } from '../ui/TimelineEmptyState'
 import { TimelineList } from '../ui/TimelineList'
+import { LIMIT_PAGE } from '@/constants'
 
 export const TimelineComponent = () => {
   const dispatch = useAppDispatch()
@@ -24,7 +25,7 @@ export const TimelineComponent = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useTimelineInfinite({
-    limit: 5,
+    limit: LIMIT_PAGE,
   })
 
   const posts = data?.pages.flatMap(page => page.items) ?? []

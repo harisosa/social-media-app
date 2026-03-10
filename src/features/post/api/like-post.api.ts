@@ -1,3 +1,4 @@
+import { LIMIT_PAGE } from "@/constants"
 import { PostLikesData, TogglePostLikeData } from "@/features/post/types"
 import { api } from "@/lib/http"
 
@@ -15,7 +16,7 @@ type TogglePostLikeParams = {
 export const getPostLikes = async ({
   postId,
   page = 1,
-  limit = 20,
+  limit = LIMIT_PAGE,
 }: GetPostLikesParams): Promise<PostLikesData> => {
   return api<PostLikesData>({
     method: "GET",

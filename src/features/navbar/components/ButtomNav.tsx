@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/container"
 
 const getActiveKey = (pathname: string) => {
   if (pathname === "/" || pathname.startsWith("/timeline")) return "home"
-  if (pathname.startsWith("/posts/create") || pathname.startsWith("/create")) return "create"
+  if (pathname.startsWith("/post/create") || pathname.startsWith("/create")) return "create"
   if (pathname.startsWith("/profile")) return "profile"
   return "home"
 }

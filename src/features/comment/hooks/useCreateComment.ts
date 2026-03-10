@@ -9,6 +9,7 @@ import { commentsQueryKeys } from "@/features/comment/queryKeys"
 import { postQueryKeys } from "@/features/post/queryKeys"
 import { queryClient } from "@/lib/query"
 import { useMyProfile } from "@/features/user/hooks"
+import { LIMIT_PAGE } from "@/constants"
 
 
 type MutationContext = {
@@ -16,7 +17,7 @@ type MutationContext = {
   previousPostDetail?: PostDetail
 }
 
-export const useCreateComment = (postId: number, limit: number = 10) => {
+export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => {
   const {data : profile} =  useMyProfile();
   const authUser = profile?.profile;
   return useMutation<PostComment, Error, string, MutationContext>({

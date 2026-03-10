@@ -1,5 +1,6 @@
 import { api } from "@/lib/http"
 import type { GetPostResponse } from "../types"
+import { LIMIT_PAGE } from "@/constants"
 
 type GetTimelineParams = {
   page?: number
@@ -8,7 +9,7 @@ type GetTimelineParams = {
 
 export const getTimeline = async ({
   page = 1,
-  limit = 20,
+  limit = LIMIT_PAGE,
 }: GetTimelineParams = {}): Promise<GetPostResponse> => {
   return api<GetPostResponse>({
     method: "GET",

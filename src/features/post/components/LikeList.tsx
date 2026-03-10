@@ -9,6 +9,7 @@ import { useGetPostLikesInfinite } from '@/features/post/hooks'
 import { UserRow } from '@/features/user/ui'
 import { useInfiniteScroll } from '@/hooks'
 import { useRouter } from 'next/navigation'
+import { LIMIT_PAGE } from '@/constants'
 
 type LikesListProps = {
   postId: number
@@ -25,7 +26,7 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
     isFetchingNextPage,
   } = useGetPostLikesInfinite({
     postId,
-    limit: 10,
+    limit: LIMIT_PAGE,
   })
 
   const followMutation = useFollowUser()

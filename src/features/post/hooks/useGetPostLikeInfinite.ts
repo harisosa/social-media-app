@@ -4,6 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { postQueryKeys } from "../queryKeys"
 import { PostLikesData } from "@/features/post/types"
 import { getPostLikes } from "@/features/post/api"
+import { LIMIT_PAGE } from "@/constants"
 
 type UsePostLikesInfiniteParams = {
   postId: number
@@ -13,7 +14,7 @@ type UsePostLikesInfiniteParams = {
 
 export const useGetPostLikesInfinite = ({
   postId,
-  limit = 20,
+  limit = LIMIT_PAGE,
 }: UsePostLikesInfiniteParams) => {
   return useInfiniteQuery<PostLikesData>({
     queryKey: postQueryKeys.likesInfinite(postId, limit),

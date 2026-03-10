@@ -1,5 +1,6 @@
 'use client'
 
+import { LIMIT_PAGE } from '@/constants'
 import { getMyPosts } from '@/features/user/api'
 import { usersQueryKeys } from '@/features/user/queryKeys'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -9,7 +10,7 @@ type UseMyPostsInfiniteParams = {
 }
 
 export const useMyPostsInfinite = ({
-  limit = 9,
+  limit = LIMIT_PAGE,
 }: UseMyPostsInfiniteParams = {}) => {
   return useInfiniteQuery({
     queryKey: usersQueryKeys.myPosts(limit),

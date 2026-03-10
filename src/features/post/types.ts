@@ -44,3 +44,9 @@ export type TogglePostLikeData = {
 export type TogglePostSaveData = {
   saved: boolean;
 };
+
+
+export type CreatePostPayload = {
+  image: File
+  caption: string
+}

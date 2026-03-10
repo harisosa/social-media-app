@@ -11,6 +11,7 @@ import { PostDetail } from '@/features/post/types'
 import { PostActions } from '@/features/post/ui/post'
 import { cn } from '@/lib/utils'
 import { useInfiniteScroll } from '@/hooks'
+import { LIMIT_PAGE } from '@/constants'
 
 type PostCommentsProps = {
   postDetail: PostDetail
@@ -20,7 +21,7 @@ type PostCommentsProps = {
 
 export const PostComments: React.FC<PostCommentsProps> = ({
   postDetail,
-  limit = 5,
+  limit = LIMIT_PAGE,
   className,
 }) => {
   const commentsQuery = useGetPostComments(postDetail.id, limit)

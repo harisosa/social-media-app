@@ -15,6 +15,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { useCreateComment } from "@/features/comment/hooks"
+import { LIMIT_PAGE } from "@/constants"
 
 type CommentTextboxProps = {
   postId: number
@@ -25,7 +26,7 @@ type CommentTextboxProps = {
 
 export const CommentTextbox: React.FC<CommentTextboxProps> = ({
   postId,
-  limit = 10,
+  limit = LIMIT_PAGE,
   className,
   disabled,
 }) => {

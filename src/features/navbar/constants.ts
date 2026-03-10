@@ -13,7 +13,7 @@ export const NAV_ITEMS: NavItem[] = [
   {
     key: "create",
     label: "",
-    href: "/posts/create",
+    href: "/post/create",
     icon: PlusIcon,
   },
   {

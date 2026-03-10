@@ -1,3 +1,4 @@
+import { LIMIT_PAGE } from '@/constants'
 import { GetPostResponse } from '@/features/timeline/types'
 import { GetUserProfileParams, UserProfileResponse } from '@/features/user/types'
 import { api } from '@/lib/http'
@@ -13,7 +14,7 @@ export const getUserProfile = async (username: string) : Promise<UserProfileResp
 export const getUserPosts = async ({
   username,
   page = 1,
-  limit = 9,
+  limit = LIMIT_PAGE,
 }: GetUserProfileParams) => {
   return await api<GetPostResponse>({
     method: 'GET',
@@ -25,7 +26,7 @@ export const getUserPosts = async ({
 export const getUserLikedPosts = async ({
   username,
   page = 1,
-  limit = 20,
+  limit = LIMIT_PAGE,
 }: GetUserProfileParams) => {
   return await api<GetPostResponse>({
     method: 'GET',
