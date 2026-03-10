@@ -57,11 +57,7 @@ export const FeedsComponent = () => {
       })
     )
   }
-console.log('feed', {
-  hasNextPage,
-  isFetchingNextPage,
-  pages: data?.pages,
-})
+  
   const handleShare = (postId: number) => {
     console.log('share post', postId)
   }

@@ -10,6 +10,8 @@ type ProfileStatsProps = {
   isError?: boolean
   onRetry?: () => void
   className?: string
+  onFollowersClick?: () => void
+  onFollowingClick?: () => void
 }
 
 export const ProfileStats = ({
@@ -21,6 +23,8 @@ export const ProfileStats = ({
   isError = false,
   onRetry,
   className,
+  onFollowersClick,
+  onFollowingClick
 }: ProfileStatsProps) => {
   if (isLoading) {
     return (
@@ -77,8 +81,8 @@ export const ProfileStats = ({
       className={cn('grid grid-cols-4 ', className)}
     >
       <StatItem label="Post" value={posts} />
-      <StatItem label="Followers" value={followers} withDivider />
-      <StatItem label="Following" value={following} withDivider />
+      <StatItem label="Followers" value={followers} withDivider onClick={onFollowersClick} />
+      <StatItem label="Following" value={following} withDivider onClick={onFollowingClick} />
       <StatItem label="Likes" value={likes} withDivider />
     </section>
   )
@@ -88,14 +92,17 @@ type StatItemProps = {
   label: string
   value: number
   withDivider?: boolean
+  onClick?: () => void
 }
 
-const StatItem = ({ label, value, withDivider }: StatItemProps) => {
+const StatItem = ({ label, value, withDivider, onClick }: StatItemProps) => {
   return (
     <div
+     onClick={onClick}
       className={cn(
         'flex flex-col items-center justify-center gap-1 px-2 py-4',
-        withDivider && 'border-l border-white/10'
+        withDivider && 'border-l border-white/10',
+        onClick ? 'cursor-pointer' : ''
       )}
     >
       <span className="text-2xl font-bold leading-none text-white">{value}</span>

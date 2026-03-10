@@ -2,18 +2,21 @@
 
 import { useMutation } from '@tanstack/react-query'
 
-import {
-  getUserProfileFollowSnapshot,
-  rollbackFollowSnapshots,
-  updateFollowStatesCaches,
-  updateUserProfileFollowCache,
-} from '@/features/follow/hooks/follow-cache'
 import { followUser, unfollowUser } from '@/features/follow/api'
 import { postQueryKeys } from '@/features/post/queryKeys'
+import { usersQueryKeys } from '@/features/user/queryKeys'
 import { queryClient } from '@/lib/query'
 import { useAppSelector } from '@/lib/hook'
 import { selectIsAuthenticated } from '@/features/auth'
 import { appToast } from '@/lib/toast'
+import {
+  getLikesCachesSnapshots,
+  getUserProfileFollowSnapshot,
+  invalidateUserFollowLists,
+  rollbackFollowSnapshots,
+  updateFollowStateInLikesCaches,
+  updateUserProfileFollowCache,
+} from '@/features/follow/lib'
 
 type FollowUserInput = {
   userId: number
@@ -22,27 +25,39 @@ type FollowUserInput = {
 }
 
 export const useFollowUser = () => {
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-  return useMutation(
-    {
+  return useMutation({
     mutationFn: async ({ username, following }: FollowUserInput) => {
+      if (!isAuthenticated) {
+        throw new Error('AUTH_REQUIRED')
+      }
+
       return following ? unfollowUser(username) : followUser(username)
     },
+
     onMutate: async ({ userId, username, following }) => {
       await queryClient.cancelQueries({
         queryKey: postQueryKeys.all,
       })
 
-      const likesSnapshots = updateFollowStatesCaches({
+      await queryClient.cancelQueries({
+        queryKey: usersQueryKeys.all,
+      })
+
+      const likesSnapshots = getLikesCachesSnapshots({
         queryClient,
-        userId,
-        following: !following,
       })
 
       const profileSnapshot = getUserProfileFollowSnapshot({
         queryClient,
         username,
+      })
+
+      updateFollowStateInLikesCaches({
+        queryClient,
+        userId,
+        following: !following,
       })
 
       updateUserProfileFollowCache({
@@ -56,20 +71,24 @@ export const useFollowUser = () => {
       }
     },
 
-    onError: (_error, _variables, context) => {
+    onError: (error, _variables, context) => {
       if (context?.snapshots) {
         rollbackFollowSnapshots({
           queryClient,
           snapshots: context.snapshots,
         })
       }
-      if(!isAuthenticated){
+
+      if (error instanceof Error && error.message === 'AUTH_REQUIRED') {
         appToast.error('Please login before follow this user')
+        return
       }
+
+      appToast.error('Failed to update follow status')
     },
 
     onSuccess: (response, variables) => {
-      updateFollowStatesCaches({
+      updateFollowStateInLikesCaches({
         queryClient,
         userId: variables.userId,
         following: response.following,
@@ -79,6 +98,11 @@ export const useFollowUser = () => {
         queryClient,
         username: variables.username,
         following: response.following,
+      })
+
+      invalidateUserFollowLists({
+        queryClient,
+        username: variables.username,
       })
     },
   })

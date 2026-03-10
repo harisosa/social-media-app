@@ -20,6 +20,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/hook"
 import { LikesList, PostDetail } from "@/features/post/components"
 import { selectOverlayIsSize } from "@/features/ui/store/ui.selectors"
 import { usePathname } from "next/navigation"
+import { FollowersList } from "@/features/follow/components/FollowersList"
+import { FollowingList } from "@/features/follow/components/FollowingList"
 export const OverlayContainer = () => {
   const pathname = usePathname()
   const dispatch = useAppDispatch()
@@ -61,6 +63,16 @@ export const OverlayContainer = () => {
       title = "Likes"
       description = "List of users who liked this post."
       content = <LikesList postId={payload?.postId as number} />
+      break
+    case "followers":
+      title = "Followers"
+      description = "List of follower"
+      content = <FollowersList username={payload?.username as string} />
+      break
+    case "following":
+      title = "Following"
+      description = "List of following"
+      content = <FollowingList username={payload?.username as string} />
       break
 
     default:

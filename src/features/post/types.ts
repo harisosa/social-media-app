@@ -13,18 +13,6 @@ export type PostModel = {
   isSaved: boolean;
 };
 
-export type PostDetail = {
-  id: number
-  imageUrl: string
-  caption: string
-  createdAt: string
-  author: User
-  likeCount: number
-  commentCount: number
-  likedByMe: boolean
-  isSaved: boolean;
-}
-
 export type PostLikesUser = User &{
   isFollowedByMe: boolean;
   isMe: boolean;

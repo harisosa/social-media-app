@@ -102,11 +102,5 @@ export const useTogglePostLike = () => {
         appToast.error("Please login before like this post");
       }
     },
-
-    onSettled: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: timelineQueryKeys.all,
-      });
-    },
   });
 };

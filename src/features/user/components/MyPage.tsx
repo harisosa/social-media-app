@@ -74,6 +74,26 @@ export const MyProfileComponent = () => {
        )
   }
 
+  const onFollowersClick = () => {
+        dispatch(
+      openOverlay({
+        type: 'followers',
+        payload: { username: profile?.username },
+        size: 'md',
+      })
+    )
+  }
+
+    const onFollowingClick = () => {
+        dispatch(
+      openOverlay({
+        type: 'following',
+        payload: { username: profile?.username },
+        size: 'md',
+      })
+    )
+  }
+
   return (
     <>
       <ProfileNav
@@ -111,7 +131,10 @@ export const MyProfileComponent = () => {
             isError={profileQuery.isError}
             onRetry={() => {
               void profileQuery.refetch()
-            }} />
+            }} 
+            onFollowersClick={onFollowersClick}
+            onFollowingClick={onFollowingClick}
+            />
 
           <div className="px-5 pb-6 lg:px-0">
             <ProfileTabs

@@ -95,7 +95,6 @@ export const UserProfileComponent = ({
     if (!profile) return;
 
     if (profile?.isMe) {
-      console.log('edit profile')
       return
     }
     await followMutation.mutateAsync({ userId: profile.id, username: profile.username, following: profile.isFollowing })
@@ -111,6 +110,26 @@ export const UserProfileComponent = ({
         type: 'post-detail',
         payload: { postId: id },
         size: 'lg',
+      })
+    )
+  }
+
+    const onFollowersClick = () => {
+        dispatch(
+      openOverlay({
+        type: 'followers',
+        payload: { username: profile?.username },
+        size: 'md',
+      })
+    )
+  }
+
+    const onFollowingClick = () => {
+        dispatch(
+      openOverlay({
+        type: 'following',
+        payload: { username: profile?.username },
+        size: 'md',
       })
     )
   }
@@ -153,7 +172,10 @@ export const UserProfileComponent = ({
             isError={profileQuery.isError}
             onRetry={() => {
               void profileQuery.refetch()
-            }} />
+            }} 
+            onFollowersClick={onFollowersClick}
+            onFollowingClick={onFollowingClick}
+            />
 
           <div className="px-5 pb-6 lg:px-0">
             <ProfileTabs
