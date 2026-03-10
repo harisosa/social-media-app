@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { searchUsers } from "@/features/user/api"
 import { usersQueryKeys } from "@/features/user/queryKeys"
+import { STALE_TIME } from "@/constants"
 
 interface Params {
   q: string
@@ -10,7 +11,7 @@ interface Params {
 export const useUserSearch = ({ q, limit = 20 }: Params) => {
   return useInfiniteQuery({
     queryKey: usersQueryKeys.search(q),
-
+    staleTime: STALE_TIME,
     queryFn: ({ pageParam = 1 }) =>
       searchUsers({
         q,

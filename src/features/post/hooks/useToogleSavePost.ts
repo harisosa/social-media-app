@@ -1,25 +1,32 @@
-"use client"
+"use client";
 
-import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query"
-import { timelineQueryKeys } from "@/features/timeline/queryKeys"
-import type { GetPostResponse } from "@/features/timeline/types"
-import { TogglePostSaveData } from "@/features/post/types"
-import { savePost, unsavePost } from "@/features/post/api"
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { timelineQueryKeys } from "@/features/timeline/queryKeys";
+import type { GetPostResponse } from "@/features/timeline/types";
+import { TogglePostSaveData } from "@/features/post/types";
+import { savePost, unsavePost } from "@/features/post/api";
+import { selectIsAuthenticated } from "@/features/auth";
+import { useAppSelector } from "@/lib/hook";
+import { queryClient } from "@/lib/query";
+import { appToast } from "@/lib/toast";
 
 type TogglePostSaveParams = {
-  postId: number
-  isSaved: boolean
-}
+  postId: number;
+  isSaved: boolean;
+};
 
 type TogglePostSaveContext = {
   previousTimelineQueries: Array<
     [readonly unknown[], InfiniteData<GetPostResponse> | undefined]
-  >
-}
+  >;
+};
 
 export const useTogglePostSave = () => {
-  const queryClient = useQueryClient()
-
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   return useMutation<
     TogglePostSaveData,
     Error,
@@ -28,21 +35,22 @@ export const useTogglePostSave = () => {
   >({
     mutationFn: async ({ postId, isSaved }) => {
       if (isSaved) {
-        return unsavePost({ postId })
+        return unsavePost({ postId });
       }
 
-      return savePost({ postId })
+      return savePost({ postId });
     },
 
     onMutate: async ({ postId, isSaved }) => {
       await queryClient.cancelQueries({
         queryKey: timelineQueryKeys.all,
-      })
+      });
 
-      const previousTimelineQueries =
-        queryClient.getQueriesData<InfiniteData<GetPostResponse>>({
-          queryKey: timelineQueryKeys.all,
-        })
+      const previousTimelineQueries = queryClient.getQueriesData<
+        InfiniteData<GetPostResponse>
+      >({
+        queryKey: timelineQueryKeys.all,
+      });
 
       queryClient.setQueriesData<InfiniteData<GetPostResponse>>(
         {
@@ -50,7 +58,7 @@ export const useTogglePostSave = () => {
         },
         (old) => {
           if (!old) {
-            return old
+            return old;
           }
 
           return {
@@ -59,32 +67,36 @@ export const useTogglePostSave = () => {
               ...page,
               items: page.items.map((item) => {
                 if (item.id !== postId) {
-                  return item
+                  return item;
                 }
 
                 return {
                   ...item,
                   isSaved: !isSaved,
-                }
+                };
               }),
             })),
-          }
-        }
-      )
+          };
+        },
+      );
 
       return {
         previousTimelineQueries,
-      }
+      };
     },
 
     onError: (_error, _variables, context) => {
       if (!context?.previousTimelineQueries) {
-        return
+        return;
       }
 
       context.previousTimelineQueries.forEach(([queryKey, data]) => {
-        queryClient.setQueryData(queryKey, data)
-      })
+        queryClient.setQueryData(queryKey, data);
+      });
+
+      if (!isAuthenticated) {
+        appToast.error("Please login before save this post");
+      }
     },
-  })
-}
+  });
+};

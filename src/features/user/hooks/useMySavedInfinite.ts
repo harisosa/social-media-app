@@ -5,7 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { PaginationParams } from '@/types'
 import { usersQueryKeys } from '@/features/user/queryKeys'
 import { getMySavedPosts } from '@/features/user/api'
-import { LIMIT_PAGE } from '@/constants'
+import { LIMIT_PAGE, STALE_TIME } from '@/constants'
 
 export const useMySavedPostsInfinite = ({
     page= 1,
@@ -13,6 +13,7 @@ export const useMySavedPostsInfinite = ({
 }: PaginationParams) => {
   return useInfiniteQuery({
     queryKey: usersQueryKeys.mySavedPosts(limit),
+    staleTime: STALE_TIME,
     queryFn: ({ pageParam = 1 }) =>
       getMySavedPosts({
         page: pageParam,

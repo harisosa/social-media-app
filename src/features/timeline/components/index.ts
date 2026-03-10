@@ -1,1 +1,2 @@
-export * from './TimelineComponent'
+export * from './FeedsComponent'
+export * from './TimelineComponent';

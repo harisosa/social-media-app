@@ -8,6 +8,7 @@ import { PostComments } from "@/features/comment/components"
 import { PostDetailSkeleton } from "@/features/post/ui/PostDetailSkeleton"
 import { PostDetailError } from "@/features/post/ui"
 import { UserRow } from "@/features/user/ui"
+import { useRouter } from "next/navigation"
 
 type PostDetailDialogProps = {
   postId: number | null
@@ -16,6 +17,7 @@ type PostDetailDialogProps = {
 export const PostDetail: React.FC<PostDetailDialogProps> = ({
   postId
 }) => {
+  const router = useRouter();
   const resolvedPostId = postId ?? 0
 
   const postQuery = usePostDetail(resolvedPostId)
@@ -45,7 +47,11 @@ export const PostDetail: React.FC<PostDetailDialogProps> = ({
 
             <div className="flex min-h-0 w-full flex-col border-t border-[#181D27] bg-[#0A0D12] lg:w-120 lg:border-l lg:border-t-0">
               <div className="flex flex-col flex-1 overflow-y-auto p-4 gap-4">
-                <UserRow user={postQuery.data.author} timePost={postQuery.data.createdAt} />
+                <UserRow 
+                onClick={(username) => {
+                      router.push(`/profile/${username}`)
+                    }} 
+                user={postQuery.data.author} timePost={postQuery.data.createdAt} />
                 <PostComments  postDetail={postQuery.data} />
               </div>
             </div>

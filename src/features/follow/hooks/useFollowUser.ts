@@ -11,6 +11,9 @@ import {
 import { followUser, unfollowUser } from '@/features/follow/api'
 import { postQueryKeys } from '@/features/post/queryKeys'
 import { queryClient } from '@/lib/query'
+import { useAppSelector } from '@/lib/hook'
+import { selectIsAuthenticated } from '@/features/auth'
+import { appToast } from '@/lib/toast'
 
 type FollowUserInput = {
   userId: number
@@ -19,12 +22,13 @@ type FollowUserInput = {
 }
 
 export const useFollowUser = () => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
-  return useMutation({
+  return useMutation(
+    {
     mutationFn: async ({ username, following }: FollowUserInput) => {
       return following ? unfollowUser(username) : followUser(username)
     },
-
     onMutate: async ({ userId, username, following }) => {
       await queryClient.cancelQueries({
         queryKey: postQueryKeys.all,
@@ -58,6 +62,9 @@ export const useFollowUser = () => {
           queryClient,
           snapshots: context.snapshots,
         })
+      }
+      if(!isAuthenticated){
+        appToast.error('Please login before follow this user')
       }
     },
 

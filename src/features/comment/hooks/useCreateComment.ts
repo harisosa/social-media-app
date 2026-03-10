@@ -4,12 +4,13 @@ import { InfiniteData, useMutation } from "@tanstack/react-query"
 
 import type { PostDetail } from "@/features/post/types"
 import { PostComment, PostCommentsResponse } from "@/features/comment/types"
-import { createComment } from "@/features/comment/api.ts/api"
+import { createComment } from "@/features/comment/api/api"
 import { commentsQueryKeys } from "@/features/comment/queryKeys"
 import { postQueryKeys } from "@/features/post/queryKeys"
 import { queryClient } from "@/lib/query"
 import { useMyProfile } from "@/features/user/hooks"
 import { LIMIT_PAGE } from "@/constants"
+import { appToast } from "@/lib/toast"
 
 
 type MutationContext = {
@@ -116,6 +117,10 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
           postQueryKeys.detail(postId),
           context.previousPostDetail
         )
+      }
+
+      if(!authUser){
+        appToast.error('Please Login before comment')
       }
     },
 

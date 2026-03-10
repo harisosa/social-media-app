@@ -1,26 +1,33 @@
-"use client"
+"use client";
 
-import { InfiniteData, useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
-import { timelineQueryKeys } from "@/features/timeline/queryKeys"
-import type { GetPostResponse } from "@/features/timeline/types"
-import { TogglePostLikeData } from "@/features/post/types"
-import { likePost, unlikePost } from "@/features/post/api"
+import { timelineQueryKeys } from "@/features/timeline/queryKeys";
+import type { GetPostResponse } from "@/features/timeline/types";
+import { TogglePostLikeData } from "@/features/post/types";
+import { likePost, unlikePost } from "@/features/post/api";
+import { queryClient } from "@/lib/query";
+import { selectIsAuthenticated } from "@/features/auth";
+import { useAppSelector } from "@/lib/hook";
+import { appToast } from "@/lib/toast";
 
 type TogglePostLikeParams = {
-  postId: number
-  likedByMe: boolean
-}
+  postId: number;
+  likedByMe: boolean;
+};
 
 type TogglePostLikeContext = {
   previousTimelineQueries: Array<
     [readonly unknown[], InfiniteData<GetPostResponse> | undefined]
-  >
-}
+  >;
+};
 
 export const useTogglePostLike = () => {
-  const queryClient = useQueryClient()
-
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   return useMutation<
     TogglePostLikeData,
     Error,
@@ -29,21 +36,22 @@ export const useTogglePostLike = () => {
   >({
     mutationFn: async ({ postId, likedByMe }) => {
       if (likedByMe) {
-        return unlikePost({ postId })
+        return unlikePost({ postId });
       }
 
-      return likePost({ postId })
+      return likePost({ postId });
     },
 
     onMutate: async ({ postId, likedByMe }) => {
       await queryClient.cancelQueries({
         queryKey: timelineQueryKeys.all,
-      })
+      });
 
-      const previousTimelineQueries =
-        queryClient.getQueriesData<InfiniteData<GetPostResponse>>({
-          queryKey: timelineQueryKeys.all,
-        })
+      const previousTimelineQueries = queryClient.getQueriesData<
+        InfiniteData<GetPostResponse>
+      >({
+        queryKey: timelineQueryKeys.all,
+      });
 
       queryClient.setQueriesData<InfiniteData<GetPostResponse>>(
         {
@@ -51,7 +59,7 @@ export const useTogglePostLike = () => {
         },
         (old) => {
           if (!old) {
-            return old
+            return old;
           }
 
           return {
@@ -60,7 +68,7 @@ export const useTogglePostLike = () => {
               ...page,
               items: page.items.map((item) => {
                 if (item.id !== postId) {
-                  return item
+                  return item;
                 }
 
                 return {
@@ -69,32 +77,36 @@ export const useTogglePostLike = () => {
                   likeCount: likedByMe
                     ? Math.max(0, item.likeCount - 1)
                     : item.likeCount + 1,
-                }
+                };
               }),
             })),
-          }
-        }
-      )
+          };
+        },
+      );
 
       return {
         previousTimelineQueries,
-      }
+      };
     },
 
     onError: (_error, _variables, context) => {
       if (!context?.previousTimelineQueries) {
-        return
+        return;
       }
 
       context.previousTimelineQueries.forEach(([queryKey, data]) => {
-        queryClient.setQueryData(queryKey, data)
-      })
+        queryClient.setQueryData(queryKey, data);
+      });
+
+      if (!isAuthenticated) {
+        appToast.error("Please login before like this post");
+      }
     },
 
     onSettled: async () => {
       await queryClient.invalidateQueries({
         queryKey: timelineQueryKeys.all,
-      })
+      });
     },
-  })
-}
+  });
+};

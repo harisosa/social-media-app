@@ -1,119 +1,63 @@
 'use client'
 
-import { Container } from '@/components/ui/container'
-import { TimelineErrorState, TimelineListSkeleton } from '@/features/timeline/ui'
-import { openOverlay } from '@/features/ui/store'
-import { useAppDispatch } from '@/lib/hook'
-import { useInfiniteScroll } from '@/hooks'
-
-import { useTimelineInfinite } from '../hooks/useTimelineInfinite'
-import { TimelineEmptyState } from '../ui/TimelineEmptyState'
-import { TimelineList } from '../ui/TimelineList'
-import { LIMIT_PAGE } from '@/constants'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import {  selectIsAuthenticated } from '@/features/auth'
+import { ExploreComponent } from '@/features/timeline/components/ExploreComponent'
+import { FeedsComponent } from '@/features/timeline/components/FeedsComponent'
+import { useAppSelector } from '@/lib/hook'
+import { Compass, Home } from 'lucide-react'
 
 export const TimelineComponent = () => {
-  const dispatch = useAppDispatch()
 
-  const {
-    data,
-    isPending,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useTimelineInfinite({
-    limit: LIMIT_PAGE,
-  })
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-  const posts = data?.pages.flatMap(page => page.items) ?? []
-
-  const { sentinelRef } = useInfiniteScroll({
-    enabled: Boolean(hasNextPage) && !isFetchingNextPage,
-    onLoadMore: () => {
-      void fetchNextPage()
-    },
-    rootMargin: '200px',
-  })
-
-  const handleOpenLikes = (postId: number) => {
-    dispatch(
-      openOverlay({
-        type: 'likes',
-        payload: { postId },
-        size: 'md',
-      })
-    )
-  }
-
-  const handleOpenComments = (postId: number) => {
-    dispatch(
-      openOverlay({
-        type: 'post-detail',
-        payload: { postId },
-        size: 'lg',
-      })
-    )
-  }
-
-  const handleShare = (postId: number) => {
-    console.log('share post', postId)
-  }
-
-  if (isPending) {
-    return (
-      <section>
-        <TimelineListSkeleton />
-      </section>
-    )
-  }
-
-  if (isError) {
-    return (
-      <section>
-        <TimelineErrorState
-          message={
-            error instanceof Error
-              ? error.message
-              : 'Something went wrong while loading posts.'
-          }
-          onRetry={() => {
-            void refetch()
-          }}
-          isRetrying={isRefetching}
-        />
-      </section>
-    )
-  }
-
-  if (!posts.length) {
-    return (
-      <section>
-        <TimelineEmptyState />
-      </section>
-    )
-  }
+  if(!isAuthenticated) return <ExploreComponent />
 
   return (
-    <section>
-      <Container size="timeline">
-        <TimelineList
-          posts={posts}
-          onOpenLikes={handleOpenLikes}
-          onOpenComments={handleOpenComments}
-          onShare={handleShare}
-        />
+    <section className="flex flex-col items-center gap-6">
+      <Tabs defaultValue="feed" className="w-full">
+        <TabsList className="mx-auto flex w-fit items-center gap-6 bg-transparent p-0">
+          
+          <TabsTrigger
+            value="feed"
+            className="
+              flex items-center gap-2
+              rounded-full px-4 py-2
+              text-neutral-400
+              data-[state=active]:bg-[#2A1B4D]
+              data-[state=active]:text-white
+            "
+          >
+            <Home size={16} />
+            Feed
+          </TabsTrigger>
 
-        {hasNextPage ? <div ref={sentinelRef} className="h-10 w-full" /> : null}
+          <div className="h-6 w-px bg-neutral-800" />
 
-        {isFetchingNextPage ? (
-          <div className="flex justify-center py-6 text-sm text-neutral-400">
-            Loading more posts...
-          </div>
-        ) : null}
-      </Container>
+          <TabsTrigger
+            value="explore"
+            className="
+              flex items-center gap-2
+              rounded-full px-4 py-2
+              text-neutral-400
+              data-[state=active]:bg-[#2A1B4D]
+              data-[state=active]:text-white
+            "
+          >
+            <Compass size={16} />
+            Explore
+          </TabsTrigger>
+
+        </TabsList>
+
+        <TabsContent value="feed">
+          <FeedsComponent />
+        </TabsContent>
+
+        <TabsContent value="explore">
+          <ExploreComponent />
+        </TabsContent>
+      </Tabs>
     </section>
   )
 }

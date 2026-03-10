@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { postQueryKeys } from "../queryKeys"
 import { PostLikesData } from "@/features/post/types"
 import { getPostLikes } from "@/features/post/api"
-import { LIMIT_PAGE } from "@/constants"
+import { LIMIT_PAGE, STALE_TIME } from "@/constants"
 
 type UsePostLikesInfiniteParams = {
   postId: number
@@ -30,6 +30,6 @@ export const useGetPostLikesInfinite = ({
       const { page, totalPages } = lastPage.pagination
       return page >= totalPages? undefined : page + 1
     },
-    staleTime: 1000 * 60,
+    staleTime: STALE_TIME,
   })
 }

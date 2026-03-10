@@ -1,4 +1,4 @@
-import { LIMIT_PAGE } from '@/constants'
+import { LIMIT_PAGE, STALE_TIME } from '@/constants'
 import { getUserPosts } from '@/features/user/api'
 import { usersQueryKeys } from '@/features/user/queryKeys'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -16,6 +16,7 @@ export const useUserPostsInfinite = ({
 }: UseUserPostsInfiniteParams) => {
   return useInfiniteQuery({
     queryKey: usersQueryKeys.posts(username, limit),
+    staleTime: STALE_TIME,
     queryFn: ({ pageParam = 1 }) =>
       getUserPosts({
         username,

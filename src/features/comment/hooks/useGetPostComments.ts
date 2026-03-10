@@ -1,6 +1,6 @@
 "use client"
 
-import { getPostComments } from "@/features/comment/api.ts/api"
+import { getPostComments } from "@/features/comment/api/api"
 import { commentsQueryKeys } from "@/features/comment/queryKeys"
 import { useInfiniteQuery } from "@tanstack/react-query"
 
@@ -22,5 +22,6 @@ export const useGetPostComments = (
       return page < totalPages ? page + 1 : undefined
     },
     enabled: Number.isFinite(postId) && postId > 0,
+    staleTime: 1000 * 30,
   })
 }

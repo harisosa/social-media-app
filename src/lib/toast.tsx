@@ -22,7 +22,7 @@ const showToast = ({ message, variant }: ShowToastParams) => {
   return toast.custom((id) => (
     <div
       className={[
-        "pointer-events-auto flex h-10 w-72.75  items-center justify-between rounded-xl px-5 py-4",
+        "pointer-events-auto flex h-10 min-w-72.75  items-center justify-between rounded-xl px-5 py-4",
         "shadow-[0_8px_30px_rgba(0,0,0,0.12)]",
         variantClassMap[variant],
       ].join(" ")}

@@ -133,7 +133,7 @@ export const MyProfileComponent = () => {
                   description: 'Share your first post to start your profile.',
                   actionLabel: 'Upload My First Post',
                   onAction: () => {
-                    console.log('upload first post')
+                    route.push('/post/create')
                   },
                 }
                 : {
