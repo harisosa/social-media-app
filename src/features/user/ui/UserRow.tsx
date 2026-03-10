@@ -8,7 +8,7 @@ import { getInitials, cn, formatTimeAgo } from "@/lib/utils"
 type UserRowProps = {
   user: User
   className?: string;
-  onClick?: (id: number) => void;
+  onClick?: (username: string) => void;
   timePost?: string;
 }
 
@@ -24,7 +24,7 @@ export const UserRow = ({ user, className, onClick, timePost }: UserRowProps) =>
 
     >
       <Avatar className="h-12 w-12 shrink-0"
-        onClick={() => onClick && onClick(user.id)}
+        onClick={() => onClick && onClick(user.username)}
       >
         <AvatarImage
           src={user.avatarUrl ?? undefined}
@@ -38,7 +38,7 @@ export const UserRow = ({ user, className, onClick, timePost }: UserRowProps) =>
 
       <div className="min-w-0">
         <p className="truncate text-sm font-bold leading-none text-white"
-          onClick={() => onClick && onClick(user.id)}
+          onClick={() => onClick && onClick(user.username)}
         >
           {user.name}
         </p>

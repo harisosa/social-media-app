@@ -21,4 +21,6 @@ export const usersQueryKeys = {
 
   posts: (username: string, limit: number) =>
     [...usersQueryKeys.all, "posts", username, { limit }] as const,
+    likes: (username: string, limit: number) =>
+    ['user', 'likes', username, { limit }] as const,
 }

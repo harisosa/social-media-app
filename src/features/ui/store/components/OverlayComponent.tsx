@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import React, { useEffect } from "react"
 
 import {
   closeOverlay,
@@ -19,7 +19,9 @@ import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useAppDispatch, useAppSelector } from "@/lib/hook"
 import { LikesList, PostDetail } from "@/features/post/components"
 import { selectOverlayIsSize } from "@/features/ui/store/ui.selectors"
+import { usePathname } from "next/navigation"
 export const OverlayContainer = () => {
+  const pathname = usePathname()
   const dispatch = useAppDispatch()
 
   const size = useAppSelector(selectOverlayIsSize)
@@ -28,6 +30,11 @@ export const OverlayContainer = () => {
   const isOpen = useAppSelector(selectOverlayIsOpen)
 
   const isDesktop = useMediaQuery("(min-width: 1024px)")
+
+   useEffect(() => {
+    dispatch(closeOverlay())
+  }, [pathname, dispatch])
+
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {

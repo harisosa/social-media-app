@@ -1,14 +1,11 @@
+import { User } from "@/features/user/types"
 import { PostActions } from "./post/PostActions"
 import { PostCaption } from "./post/PostCaption"
-import { PostHeader } from "./post/PostHeader"
 import { PostMedia } from "./post/PostMedia"
+import { UserRow } from "@/features/user/ui"
 
 type PostCardProps = {
-  author: {
-    name: string
-    username: string
-    avatarUrl: string | null
-  }
+  author: User
   createdAt: string
   imageUrl: string
   caption: string
@@ -23,6 +20,7 @@ type PostCardProps = {
   onOpenComments: () => void
   onShare: () => void
   onSave: () => void
+  onClickUser: (username: string) => void
 }
 
 export const PostCard = ({
@@ -41,10 +39,14 @@ export const PostCard = ({
   onOpenComments,
   onShare,
   onSave,
+  onClickUser
 }: PostCardProps) => {
   return (
     <article className="flex w-full flex-col gap-3">
-      <PostHeader author={author} createdAt={createdAt} />
+      <UserRow
+        onClick={onClickUser}
+        user={author}
+        timePost={createdAt} />
 
       <PostMedia
         imageUrl={imageUrl}

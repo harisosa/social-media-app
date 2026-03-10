@@ -8,12 +8,14 @@ import { useFollowUser } from '@/features/follow/hooks'
 import { useGetPostLikesInfinite } from '@/features/post/hooks'
 import { UserRow } from '@/features/user/ui'
 import { useInfiniteScroll } from '@/hooks'
+import { useRouter } from 'next/navigation'
 
 type LikesListProps = {
   postId: number
 }
 
 export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
+  const router = useRouter();
   const {
     data,
     isPending,
@@ -77,7 +79,9 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
                     key={user.id}
                     className="flex items-center justify-between gap-3 rounded-2xl px-2 py-2"
                   >
-                    <UserRow user={user} />
+                    <UserRow onClick={(username) => {
+                      router.push(`/profile/${username}`)
+                    }} user={user} />
 
                     {!user.isMe ? (
                       user.isFollowedByMe ? (

@@ -1,8 +1,8 @@
 'use client'
 
+import { getMyProfile } from '@/features/user/api'
+import { usersQueryKeys } from '@/features/user/queryKeys'
 import { useQuery } from '@tanstack/react-query'
-import { getMyProfile } from '../api'
-import { usersQueryKeys } from '../queryKeys'
 
 export const useMyProfile = () => {
   return useQuery({

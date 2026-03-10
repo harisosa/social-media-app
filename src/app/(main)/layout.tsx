@@ -1,19 +1,22 @@
-import { BottomNav, Navbar } from "@/features/navbar/components"
+"use client"
 
+import { usePathname } from "next/navigation"
+import { BottomNav, Navbar } from "@/features/navbar/components"
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-  <>
-      <Navbar />
-      <main className="pt-20 lg:pt-35">
-    {children}
-      </main>
+  const pathname = usePathname()
 
-    <BottomNav />
-  </>
+  const isProfilePage = pathname.startsWith("/profile")
+
+  return (
+    <>
+      <Navbar />
+      <main className={isProfilePage ? "" : "pt-20 lg:pt-35"}>{children}</main>
+      <BottomNav />
+    </>
   )
 }

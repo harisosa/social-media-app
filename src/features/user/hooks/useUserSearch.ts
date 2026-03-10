@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
-
-import { usersQueryKeys } from "../queryKeys"
 import { searchUsers } from "@/features/user/api"
+import { usersQueryKeys } from "@/features/user/queryKeys"
 
 interface Params {
   q: string

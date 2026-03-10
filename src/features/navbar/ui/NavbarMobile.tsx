@@ -11,6 +11,7 @@ import { Container } from "@/components/ui/container";
 import { getInitials } from "@/lib/utils";
 import { useDebounce } from "@/lib/useDebounce";
 import { SearchUsersPanel } from "@/features/user/components";
+import { usePathname } from "next/navigation";
 
 export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +23,14 @@ export const NavbarMobile = ({ isAuthenticated, user }: NavbarProps) => {
     () => isSearchOpen && debouncedQuery.trim().length > 0,
     [debouncedQuery, isSearchOpen],
   );
+
+    const pathname = usePathname()
+
+  const isProfilePage = pathname.startsWith("/profile")
+
+  if (isProfilePage) {
+    return null
+  }
 
   const handleOpenSearch = () => {
     setIsMenuOpen(false);

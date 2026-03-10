@@ -1,10 +1,11 @@
-import { Pagination } from "@/types"
+import { Pagination, PaginationParams } from "@/types"
 
 export type User = {
   id: number;
   name: string;
   username: string;
   email: string;
+  bio:string;
   phone: string;
   avatarUrl: string | null;
 };
@@ -29,14 +30,26 @@ export type UserProfile = User & {
   createdAt: string
 }
 
-export type MyProfileStats = {
+export type ProfileStats = {
   posts: number
+  post: number
   followers: number
   following: number
   likes: number
 }
 
-export type MeResponse = {
+export type MyProfileResponse = {
   profile: UserProfile
-  stats: MyProfileStats
+  stats: ProfileStats
+}
+
+export type GetUserProfileParams = PaginationParams & {
+  username: string;
+}
+
+
+export type UserProfileResponse = User &{
+   isFollowing: boolean;
+  isMe: boolean;
+  counts: ProfileStats
 }

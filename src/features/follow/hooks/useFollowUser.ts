@@ -1,13 +1,15 @@
-"use client"
+'use client'
 
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import {
+  getUserProfileFollowSnapshot,
   rollbackFollowSnapshots,
-  updateFollowStateInPostLikesCaches,
-} from "@/features/follow/hooks/follow-cache"
-import { followUser, unfollowUser } from "@/features/follow/api"
-import { postQueryKeys } from "@/features/post/queryKeys"
+  updateFollowStatesCaches,
+  updateUserProfileFollowCache,
+} from '@/features/follow/hooks/follow-cache'
+import { followUser, unfollowUser } from '@/features/follow/api'
+import { postQueryKeys } from '@/features/post/queryKeys'
 
 type FollowUserInput = {
   userId: number
@@ -23,21 +25,34 @@ export const useFollowUser = () => {
       return following ? unfollowUser(username) : followUser(username)
     },
 
-    onMutate: async ({ userId, following }) => {
+    onMutate: async ({ userId, username, following }) => {
       await queryClient.cancelQueries({
         queryKey: postQueryKeys.all,
       })
 
-      const snapshots = updateFollowStateInPostLikesCaches({
+      const likesSnapshots = updateFollowStatesCaches({
         queryClient,
         userId,
         following: !following,
       })
 
-      return { snapshots }
+      const profileSnapshot = getUserProfileFollowSnapshot({
+        queryClient,
+        username,
+      })
+
+      updateUserProfileFollowCache({
+        queryClient,
+        username,
+        following: !following,
+      })
+
+      return {
+        snapshots: [...likesSnapshots, profileSnapshot],
+      }
     },
 
-    onError: (error, _variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.snapshots) {
         rollbackFollowSnapshots({
           queryClient,
@@ -47,9 +62,15 @@ export const useFollowUser = () => {
     },
 
     onSuccess: (response, variables) => {
-      updateFollowStateInPostLikesCaches({
+      updateFollowStatesCaches({
         queryClient,
         userId: variables.userId,
+        following: response.following,
+      })
+
+      updateUserProfileFollowCache({
+        queryClient,
+        username: variables.username,
         following: response.following,
       })
     },

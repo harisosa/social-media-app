@@ -6,6 +6,7 @@ import {
   useTogglePostLike,
   useTogglePostSave,
 } from "@/features/post/hooks"
+import { useRouter } from "next/navigation"
 
 type TimelinePostItemProps = {
   post: PostModel
@@ -20,6 +21,7 @@ export const TimelinePostItem = ({
   onOpenComments,
   onShare,
 }: TimelinePostItemProps) => {
+  const router = useRouter();
   const toggleLike = useTogglePostLike()
   const toggleSave = useTogglePostSave()
 
@@ -54,6 +56,7 @@ export const TimelinePostItem = ({
       onOpenComments={() => onOpenComments(post.id)}
       onShare={() => onShare(post.id)}
       onSave={handleSave}
+      onClickUser={(username) => {router.push(`/profile/${username}`)}} 
     />
   )
 }

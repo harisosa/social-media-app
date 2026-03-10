@@ -1,5 +1,5 @@
 import { api } from "@/lib/http"
-import type { MeResponse, SearchUsersParams, SearchUsersResponse } from "../types"
+import type { MyProfileResponse, SearchUsersParams, SearchUsersResponse } from "../types"
 import { GetPostResponse } from "@/features/timeline/types"
 import { PaginationParams } from "@/types"
 
@@ -11,8 +11,8 @@ export const searchUsers = (params: SearchUsersParams) => {
   })
 }
 
-export const getMyProfile = async (): Promise<MeResponse> => {
-  return await api<MeResponse>({
+export const getMyProfile = async (): Promise<MyProfileResponse> => {
+  return await api<MyProfileResponse>({
     method: 'GET',
     url: '/me',
   })
@@ -40,7 +40,7 @@ export const getMySavedPosts = async ({
 }: PaginationParams): Promise<GetPostResponse> => {
   return await api<GetPostResponse>({
     method: 'GET',
-    url: '/api/me/saved',
+    url: '/me/saved',
     params: {
       page,
       limit,

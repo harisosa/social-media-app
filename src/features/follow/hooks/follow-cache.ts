@@ -1,4 +1,6 @@
 import { postQueryKeys } from "@/features/post/queryKeys"
+import { usersQueryKeys } from "@/features/user/queryKeys"
+import {  UserProfileResponse } from "@/features/user/types"
 import type {
   InfiniteData,
   QueryClient,
@@ -32,7 +34,7 @@ const isLikesInfiniteData = (
   return Array.isArray(candidate.pages)
 }
 
-export const updateFollowStateInPostLikesCaches = ({
+export const updateFollowStatesCaches = ({
   queryClient,
   userId,
   following,
@@ -73,6 +75,48 @@ export const updateFollowStateInPostLikesCaches = ({
   })
 
   return snapshots
+}
+
+export const getUserProfileFollowSnapshot = ({
+  queryClient,
+  username,
+}: {
+  queryClient: QueryClient
+  username: string
+}): QuerySnapshot => {
+  const queryKey = usersQueryKeys.profile(username)
+  const data = queryClient.getQueryData(queryKey)
+
+  return [queryKey, data]
+}
+
+export const updateUserProfileFollowCache = ({
+  queryClient,
+  username,
+  following,
+}: {
+  queryClient: QueryClient
+  username: string
+  following: boolean
+}) => {
+  queryClient.setQueryData<UserProfileResponse>(
+    usersQueryKeys.profile(username),
+    (old) => {
+      if (!old) return old
+
+      return {
+        ...old,
+        isFollowing: following,
+        counts: {
+          ...old.counts,
+          followers: Math.max(
+            0,
+            old.counts.followers + (following ? 1 : -1)
+          ),
+        },
+      }
+    }
+  )
 }
 
 export const rollbackFollowSnapshots = ({

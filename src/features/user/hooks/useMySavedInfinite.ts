@@ -1,9 +1,10 @@
 'use client'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { getMySavedPosts } from '../api'
-import { usersQueryKeys } from '../queryKeys'
+
 import { PaginationParams } from '@/types'
+import { usersQueryKeys } from '@/features/user/queryKeys'
+import { getMySavedPosts } from '@/features/user/api'
 
 export const useMySavedPostsInfinite = ({
     page= 1,
