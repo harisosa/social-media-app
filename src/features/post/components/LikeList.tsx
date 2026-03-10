@@ -10,6 +10,8 @@ import { UserRow, UserRowSkeleton } from '@/features/user/ui'
 import { useInfiniteScroll } from '@/hooks'
 import { useRouter } from 'next/navigation'
 import { LIMIT_PAGE } from '@/constants'
+import { useAppSelector } from '@/lib/hook'
+import { selectIsAuthenticated } from '@/features/auth'
 
 type LikesListProps = {
   postId: number
@@ -29,6 +31,8 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
     limit: LIMIT_PAGE,
   })
 
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  
   const followMutation = useFollowUser()
   const scrollContainerRef = useRef<HTMLDivElement | null>(null)
 
@@ -86,7 +90,7 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
                     router.push(`/profile/${username}`)
                   }} user={user} />
 
-                  {!user.isMe ? (
+                  {(user.isMe || isAuthenticated)? (
                     user.isFollowedByMe ? (
                       <Button
                         type="button"

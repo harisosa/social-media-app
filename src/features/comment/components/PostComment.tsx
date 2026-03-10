@@ -7,22 +7,24 @@ import { PostComment } from '@/features/comment/types'
 import { CommentListError, CommentSkeleton } from '@/features/comment/ui'
 import { CommentList } from '@/features/comment/ui/CommentList'
 import { useTogglePostLike, useTogglePostSave } from '@/features/post/hooks'
-import { PostDetail } from '@/features/post/types'
 import { PostActions } from '@/features/post/ui/post'
 import { cn } from '@/lib/utils'
 import { useInfiniteScroll } from '@/hooks'
 import { LIMIT_PAGE } from '@/constants'
+import { PostModel } from '@/features/post/types'
 
 type PostCommentsProps = {
-  postDetail: PostDetail
+  postDetail: PostModel
   limit?: number
   className?: string
+  isAuthenticated: boolean
 }
 
 export const PostComments: React.FC<PostCommentsProps> = ({
   postDetail,
   limit = LIMIT_PAGE,
   className,
+  isAuthenticated,
 }) => {
   const commentsQuery = useGetPostComments(postDetail.id, limit)
   const toggleLike = useTogglePostLike()
@@ -89,25 +91,31 @@ export const PostComments: React.FC<PostCommentsProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="hidden w-full flex-col lg:flex">
-          <PostActions
-            likedByMe={postDetail.likedByMe}
-            likeCount={postDetail.likeCount}
-            commentCount={postDetail.commentCount}
-            isSaved={postDetail.isSaved}
-            isLikePending={toggleLike.isPending}
-            isSavePending={toggleSave.isPending}
-            onLike={handleLike}
-            onOpenLikes={() => {}}
-            onOpenComments={() => {}}
-            onShare={() => {}}
-            onSave={handleSave}
-          />
-        </div>
+      {
+        isAuthenticated && (
+          <div className="flex flex-col gap-4">
+            <div className="hidden w-full flex-col lg:flex">
+              <PostActions
+                likedByMe={postDetail.likedByMe}
+                likeCount={postDetail.likeCount}
+                commentCount={postDetail.commentCount}
+                isSaved={postDetail.isSaved}
+                isLikePending={toggleLike.isPending}
+                isSavePending={toggleSave.isPending}
+                onLike={handleLike}
+                onOpenLikes={() => { }}
+                onOpenComments={() => { }}
+                onShare={() => { }}
+                onSave={handleSave}
+              />
+            </div>
 
-        <CommentTextbox postId={postDetail.id} limit={limit} />
-      </div>
+            <CommentTextbox postId={postDetail.id} limit={limit} />
+          </div>
+
+        )
+      }
+
     </div>
   )
 }

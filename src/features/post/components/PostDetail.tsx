@@ -11,6 +11,8 @@ import { UserRow } from "@/features/user/ui"
 import { useRouter } from "next/navigation"
 import { Separator } from "@/components/ui/separator"
 import { Caption } from "@/components/ui/caption"
+import { useAppSelector } from "@/lib/hook"
+import { selectIsAuthenticated } from "@/features/auth"
 
 
 type PostDetailDialogProps = {
@@ -20,6 +22,7 @@ type PostDetailDialogProps = {
 export const PostDetail: React.FC<PostDetailDialogProps> = ({
   postId
 }) => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const router = useRouter();
   const resolvedPostId = postId ?? 0
 
@@ -59,8 +62,8 @@ export const PostDetail: React.FC<PostDetailDialogProps> = ({
                 <Caption caption={postQuery.data.caption} />
                 <Separator className="w-full" />
               </div>
-
-              <PostComments postDetail={postQuery.data} />
+                  <PostComments postDetail={postQuery.data} isAuthenticated={isAuthenticated} />
+              
             </div>
           </div>
         </div>

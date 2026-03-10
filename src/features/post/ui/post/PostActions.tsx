@@ -2,6 +2,8 @@ import { Bookmark, Heart, MessageCircle, Send } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useAppSelector } from "@/lib/hook"
+import { selectIsAuthenticated } from "@/features/auth"
 
 type PostActionsProps = {
   likedByMe: boolean
@@ -30,6 +32,7 @@ export const PostActions = ({
   onShare,
   onSave,
 }: PostActionsProps) => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
   return (
     <div className="flex items-center justify-between px-1">
       <div className="flex items-center gap-4">
@@ -39,7 +42,7 @@ export const PostActions = ({
             size="icon"
             type="button"
             aria-label="Like post"
-            disabled={isLikePending}
+            disabled={isLikePending || !isAuthenticated}
             onClick={onLike}
           >
             <Heart
@@ -69,7 +72,7 @@ export const PostActions = ({
             aria-label="Open comments"
             onClick={onOpenComments}
           >
-            <MessageCircle className="size-6"/>
+            <MessageCircle className="size-6" />
           </Button>
 
           <Button
@@ -82,18 +85,21 @@ export const PostActions = ({
           </Button>
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          type="button"
-          aria-label="Share post"
-          onClick={onShare}
-        >
-          <Send className="'ize-6" />
-        </Button>
+        {isAuthenticated && (
+          <Button
+            variant="ghost"
+            size="icon"
+            type="button"
+            aria-label="Share post"
+            onClick={onShare}
+          >
+            <Send className="'ize-6" />
+          </Button>
+        )}
+
       </div>
 
-      <Button
+      {isAuthenticated && (<Button
         variant="ghost"
         size="icon"
         type="button"
@@ -102,9 +108,10 @@ export const PostActions = ({
         onClick={onSave}
       >
         <Bookmark
-          className={cn('size-6',isSaved && "fill-white text-white")}
+          className={cn('size-6', isSaved && "fill-white text-white")}
         />
-      </Button>
+      </Button>)}
+
     </div>
   )
 }

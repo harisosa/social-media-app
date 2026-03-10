@@ -2,7 +2,7 @@
 
 import { InfiniteData, useMutation } from "@tanstack/react-query"
 
-import type { PostDetail } from "@/features/post/types"
+import type { PostModel } from "@/features/post/types"
 import { PostComment, PostCommentsResponse } from "@/features/comment/types"
 import { createComment } from "@/features/comment/api/api"
 import { commentsQueryKeys } from "@/features/comment/queryKeys"
@@ -15,7 +15,7 @@ import { appToast } from "@/lib/toast"
 
 type MutationContext = {
   previousComments?: InfiniteData<PostCommentsResponse>
-  previousPostDetail?: PostDetail
+  previousPostDetail?: PostModel
 }
 
 export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => {
@@ -42,7 +42,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
           commentsQueryKeys.list(postId, limit)
         )
 
-      const previousPostDetail = queryClient.getQueryData<PostDetail>(
+      const previousPostDetail = queryClient.getQueryData<PostModel>(
         postQueryKeys.detail(postId)
       )
 
@@ -87,7 +87,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
         }
       )
 
-      queryClient.setQueryData<PostDetail>(postQueryKeys.detail(postId), (old) => {
+      queryClient.setQueryData<PostModel>(postQueryKeys.detail(postId), (old) => {
         if (!old) {
           return old
         }

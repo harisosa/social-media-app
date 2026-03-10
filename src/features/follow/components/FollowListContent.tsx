@@ -11,6 +11,8 @@ import { UserRow, UserRowSkeleton } from '@/features/user/ui'
 import { useInfiniteScroll } from '@/hooks'
 import { FollowUsersResponse } from '@/features/follow/types'
 import { useMyProfile } from '@/features/user/hooks'
+import { useAppSelector } from '@/lib/hook'
+import { selectIsAuthenticated } from '@/features/auth'
 
 
 type FollowListContentProps = {
@@ -36,6 +38,8 @@ export const FollowListContent: React.FC<FollowListContentProps> = ({
   isFetchingNextPage,
   fetchNextPage,
 }) => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+
   const { data: me} = useMyProfile();
   const router = useRouter()
   const followMutation = useFollowUser()
@@ -98,7 +102,7 @@ export const FollowListContent: React.FC<FollowListContentProps> = ({
                       }}
                     />
 
-                    {!(me?.profile.id == user.id) ? (
+                    {!((me?.profile.id == user.id) || !isAuthenticated)? (
                       user.isFollowedByMe ? (
                         <Button
                           type="button"

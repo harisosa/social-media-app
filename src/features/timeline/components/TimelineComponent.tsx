@@ -12,7 +12,7 @@ export const TimelineComponent = () => {
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-  if(!isAuthenticated) return <ExploreComponent />
+  if(!isAuthenticated) return <Container size='timeline' className="flex flex-col items-center gap-6"><ExploreComponent /></Container>
 
   return (
     <Container size='timeline' className="flex flex-col items-center gap-6">

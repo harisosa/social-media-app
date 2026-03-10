@@ -1,9 +1,9 @@
 import { api } from "@/lib/http"
 
-import { CreatePostPayload, PostDetail, PostModel } from "../types"
+import { CreatePostPayload, PostModel } from "../types"
 
 export const getPostDetail = (postId: number) =>
-  api<PostDetail>({
+  api<PostModel>({
     method: "GET",
     url: `/posts/${postId}`,
   })

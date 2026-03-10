@@ -27,9 +27,10 @@ import type {
 import { useFollowUser } from '@/features/follow/hooks'
 import { cn } from '@/lib/utils'
 import { CheckCircle2, CircleIcon } from 'lucide-react'
-import { useAppDispatch } from '@/lib/hook'
+import { useAppDispatch, useAppSelector } from '@/lib/hook'
 import { openOverlay } from '@/features/ui/store'
 import { useRouter } from 'next/navigation'
+import { selectIsAuthenticated } from '@/features/auth'
 
 type UserProfileComponentProps = {
   username: string
@@ -54,6 +55,7 @@ export const UserProfileComponent = ({
   const route = useRouter();
   const [activeTab, setActiveTab] = useState<ProfileTabKey>('gallery')
   const dispatch = useAppDispatch()
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   const profileQuery = useUserProfile(username)
   const postsQuery = useUserPostsInfinite({ username, limit: 9 })
@@ -144,7 +146,7 @@ export const UserProfileComponent = ({
         <div className="space-y-4 pb-24">
           <ProfileHeader
             profile={profile}
-            primaryAction={{
+            primaryAction={isAuthenticated ? {
               label: profile?.isFollowing ? 'Following' : 'Follow',
               onClick: handlePrimaryAction,
               className: cn('h-12 w-full sm:w-[130px]',
@@ -152,11 +154,11 @@ export const UserProfileComponent = ({
               ),
 
               icon: profile?.isFollowing ? (<CheckCircle2 className='size-4' />) : null
-            }}
-            secondaryAction={{
+            }: undefined}
+            secondaryAction={isAuthenticated ? {
               ariaLabel: 'Share profile',
               onClick: handleShareProfile,
-            }}
+            }: undefined}
             isLoading={profileQuery.isPending}
             isError={profileQuery.isError}
             onRetry={() => {
