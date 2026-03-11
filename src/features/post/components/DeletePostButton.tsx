@@ -15,19 +15,23 @@ import {
 } from '@/components/ui/alert-dialog'
 
 import { useDeletePost } from '../hooks/useDeletePost'
+import { useAppDispatch } from '@/lib/hook'
+import { closeOverlay } from '@/features/ui/store'
 
 type DeletePostButtonProps = {
-  postId: number
-  username?: string
+  postId: number;
+  username?: string;
 }
 
 export const DeletePostButton = ({
-  postId,
+  postId
 }: DeletePostButtonProps) => {
-  const deleteMutation = useDeletePost()
+  const deleteMutation = useDeletePost();
+  const dispatch = useAppDispatch()
 
-  const handleDelete = () => {
-    deleteMutation.mutate(postId);
+  const handleDelete = async () => {
+    await deleteMutation.mutate(postId);
+    dispatch(closeOverlay())
   }
 
   return (
