@@ -11,6 +11,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/lib/hook'
 import { openOverlay } from '@/features/ui/store'
+import { LIMIT_PAGE } from '@/constants'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 
 const PROFILE_TABS: ProfileTabItem[] = [
@@ -23,8 +26,8 @@ export const MyProfileComponent = () => {
   const [activeTab, setActiveTab] = useState<ProfileTabKey>('gallery')
   const dispatch = useAppDispatch()
   const profileQuery = useMyProfile()
-  const postsQuery = useMyPostsInfinite({ limit: 9 })
-  const savedPostsQuery = useMySavedPostsInfinite({ page: 1, limit: 9 })
+  const postsQuery = useMyPostsInfinite({ limit: LIMIT_PAGE })
+  const savedPostsQuery = useMySavedPostsInfinite({ page: 1, limit: LIMIT_PAGE })
 
   const profile = profileQuery.data?.profile
   const stats = profileQuery.data?.stats
@@ -65,17 +68,17 @@ export const MyProfileComponent = () => {
   }
 
   const handleItemClick = (id: number) => {
-       dispatch(
-         openOverlay({
-           type: 'post-detail',
-           payload: { postId: id },
-           size: 'lg',
-         })
-       )
+    dispatch(
+      openOverlay({
+        type: 'post-detail',
+        payload: { postId: id },
+        size: 'lg',
+      })
+    )
   }
 
   const onFollowersClick = () => {
-        dispatch(
+    dispatch(
       openOverlay({
         type: 'followers',
         payload: { username: profile?.username },
@@ -84,8 +87,8 @@ export const MyProfileComponent = () => {
     )
   }
 
-    const onFollowingClick = () => {
-        dispatch(
+  const onFollowingClick = () => {
+    dispatch(
       openOverlay({
         type: 'following',
         payload: { username: profile?.username },
@@ -106,12 +109,17 @@ export const MyProfileComponent = () => {
           <ProfileHeader
 
             profile={profile}
-            primaryAction={{
-              label: 'Edit Profile',
-              onClick: handleEditProfile,
-              variant: 'outline',
-              className: "w-[130px] h-[48px] "
-            }}
+            primaryAction={
+              <Button
+                variant='outline'
+                onClick={handleEditProfile}
+
+                className={cn(
+                  'h-12 flex-1 rounded-full border font-semibold w-32.5',
+                )}
+              >Edit Profile
+              </Button>
+            }
             secondaryAction={{
               ariaLabel: 'Share profile',
               onClick: handleShareProfile,
@@ -131,10 +139,10 @@ export const MyProfileComponent = () => {
             isError={profileQuery.isError}
             onRetry={() => {
               void profileQuery.refetch()
-            }} 
+            }}
             onFollowersClick={onFollowersClick}
             onFollowingClick={onFollowingClick}
-            />
+          />
 
           <div className="px-5 pb-6 lg:px-0">
             <ProfileTabs

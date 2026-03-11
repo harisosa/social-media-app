@@ -7,14 +7,13 @@ import { Button } from '@/components/ui/button'
 import { cn, getInitials } from '@/lib/utils'
 
 import type {
-  ProfileHeaderAction,
   ProfileHeaderData,
   ProfileHeaderSecondaryAction,
 } from '@/features/user/types'
 
 type Props = {
   profile?: ProfileHeaderData
-  primaryAction?: ProfileHeaderAction
+  primaryAction?:  React.ReactNode
   secondaryAction?: ProfileHeaderSecondaryAction
   isLoading?: boolean
   isError?: boolean
@@ -86,10 +85,6 @@ export const ProfileHeader = ({
     )
   }
 
-  const primaryButtonClass =
-    primaryAction?.variant === 'filled'
-      ? 'border-transparent bg-[#7751F9] text-white hover:bg-[#6A45E8]'
-      : 'border-white/10 bg-transparent text-white hover:bg-white/5'
 
   return (
     <section className={cn('w-full', className)}>
@@ -112,20 +107,7 @@ export const ProfileHeader = ({
           </div>
 
           <div className="flex items-center gap-3">
-            {primaryAction ? (
-              <Button
-                onClick={primaryAction.onClick}
-                disabled={primaryAction.disabled}
-                className={cn(
-                  'h-11 flex-1 rounded-full border font-semibold',
-                  primaryButtonClass,
-                  primaryAction.className
-                )}
-              >
-                {primaryAction.icon}
-                {primaryAction.label}
-              </Button>
-            ) : null}
+            {primaryAction}
 
             {secondaryAction ? (
               <Button

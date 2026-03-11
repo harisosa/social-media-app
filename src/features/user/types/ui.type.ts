@@ -1,11 +1,3 @@
-export type ProfileHeaderAction = {
-  label: string
-  onClick: () => void
-  variant?: 'filled' | 'outline'
-  disabled?: boolean
-  icon?: React.ReactNode
-  className?: string
-}
 
 export type ProfileHeaderSecondaryAction = {
   onClick: () => void

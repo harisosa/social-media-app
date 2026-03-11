@@ -1,16 +1,18 @@
 'use client'
 
+import { LIMIT_PAGE } from '@/constants'
 import { getUserFollowing } from '@/features/follow/api'
+import { followQueryKeys } from '@/features/follow/queryKeys'
 import { GetFollowUsersParams } from '@/features/follow/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 
 export const useUserFollowingInfinite = ({
   username,
-  limit = 20,
+  limit = LIMIT_PAGE,
 }: GetFollowUsersParams) => {
   return useInfiniteQuery({
-    queryKey: ['users', username, 'following', limit],
+    queryKey: followQueryKeys.followingList(username, limit),
 
     queryFn: ({ pageParam = 1 }) =>
       getUserFollowing({

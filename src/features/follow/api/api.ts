@@ -34,7 +34,7 @@ export const getUserFollowers = async ({
 export const getUserFollowing = async ({
   username,
   page = 1,
-  limit = 20,
+  limit = LIMIT_PAGE,
 }: GetFollowUsersParams): Promise<FollowUsersResponse> => {
   const res = await api<FollowUsersResponse>({
     method: 'GET',

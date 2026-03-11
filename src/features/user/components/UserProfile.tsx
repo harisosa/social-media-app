@@ -24,13 +24,12 @@ import type {
   ProfileTabItem,
   ProfileTabKey,
 } from '@/features/user/types'
-import { useFollowUser } from '@/features/follow/hooks'
-import { cn } from '@/lib/utils'
-import { CheckCircle2, CircleIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/lib/hook'
 import { openOverlay } from '@/features/ui/store'
 import { useRouter } from 'next/navigation'
 import { selectIsAuthenticated } from '@/features/auth'
+import { LIMIT_PAGE } from '@/constants'
+import { FollowButton } from '@/features/follow/components/FollowButton'
 
 type UserProfileComponentProps = {
   username: string
@@ -58,11 +57,8 @@ export const UserProfileComponent = ({
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   const profileQuery = useUserProfile(username)
-  const postsQuery = useUserPostsInfinite({ username, limit: 9 })
-  const likedPostsQuery = useUserLikedPostsInfinite({ username, limit: 9 })
-
-  const followMutation = useFollowUser()
-
+  const postsQuery = useUserPostsInfinite({ username, limit: LIMIT_PAGE })
+  const likedPostsQuery = useUserLikedPostsInfinite({ username, limit: LIMIT_PAGE })
 
   const profile = profileQuery.data
 
@@ -92,15 +88,6 @@ export const UserProfileComponent = ({
 
   const activeItems = activeTab === 'gallery' ? galleryItems : likedItems
   const activeQuery = activeTab === 'gallery' ? postsQuery : likedPostsQuery
-
-  const handlePrimaryAction = async () => {
-    if (!profile) return;
-
-    if (profile?.isMe) {
-      return
-    }
-    await followMutation.mutateAsync({ userId: profile.id, username: profile.username, following: profile.isFollowing })
-  }
 
   const handleShareProfile = () => {
     console.log('share profile', username)
@@ -146,15 +133,7 @@ export const UserProfileComponent = ({
         <div className="space-y-4 pb-24">
           <ProfileHeader
             profile={profile}
-            primaryAction={isAuthenticated ? {
-              label: profile?.isFollowing ? 'Following' : 'Follow',
-              onClick: handlePrimaryAction,
-              className: cn('h-12 w-full sm:w-[130px]',
-                !profile?.isFollowing ? 'bg-[#6936F2]' : ''
-              ),
-
-              icon: profile?.isFollowing ? (<CheckCircle2 className='size-4' />) : null
-            }: undefined}
+            primaryAction={profile  && (<FollowButton user={profile} isFollow={profile.isFollowing}/>)}
             secondaryAction={isAuthenticated ? {
               ariaLabel: 'Share profile',
               onClick: handleShareProfile,
