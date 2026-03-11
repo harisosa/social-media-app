@@ -19,34 +19,49 @@ import { DeletePostButton } from "@/features/post/components/DeletePostButton"
 
 type PostDetailDialogProps = {
   postId: number | null
+  isSavePage: boolean;
 }
 
 export const PostDetail: React.FC<PostDetailDialogProps> = ({
-  postId
+  postId,
+  isSavePage
 }) => {
+  
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const { data: myUsername } = useMyProfile((data) => data.profile.username);
   const { data: myUserId } = useMyProfile((data) => data.profile.id)
   const router = useRouter();
   const resolvedPostId = postId ?? 0
 
-  const postQuery = usePostDetail(resolvedPostId)
+  const { data, isError, isPending } = usePostDetail(resolvedPostId)
 
-  if (!postId) {
-    return null
-  }
+  const postDetail = React.useMemo(() => {
+    if (!data) return data
+
+    if (isSavePage) {
+      return {
+        ...data,
+        isSaved: true,
+      }
+    }
+
+    return data
+  }, [data, isSavePage])
 
   return (
     <div className="overflow-hidden rounded-3xl bg-[#0A0D12]">
-      {postQuery.isPending ? (<PostDetailSkeleton />) : postQuery.isError ? (
+      {isPending ? (<PostDetailSkeleton />) : isError ? (
         <PostDetailError />
-      ) : (
-        <div className="flex min-h-[85vh] flex-col lg:min-h-160 lg:flex-row">
+      ) :
+      
+      (postId && postDetail) &&
+      (
+        <div className="flex h-[85vh] flex-col lg:h-180 lg:flex-row overflow-hidden rounded-3xl bg-[#0A0D12]">
           <div className="hidden min-w-0 overflow-hidden bg-black lg:w-180 lg:flex-1 lg:flex ">
             <div className="relative h-60 w-full sm:h-80 lg:h-full lg:min-h-160">
               <Image
-                src={postQuery.data.imageUrl}
-                alt={postQuery.data.caption ?? "Post image"}
+                src={postDetail.imageUrl}
+                alt={postDetail.caption ?? "Post image"}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 70vw"
@@ -68,24 +83,24 @@ export const PostDetail: React.FC<PostDetailDialogProps> = ({
 
                       router.push(`/profile/${username}`)
                     }}
-                    user={postQuery.data.author}
-                    timePost={postQuery.data.createdAt}
+                    user={postDetail.author}
+                    timePost={postDetail.createdAt}
                   />
 
-                  {myUserId === postQuery.data.author.id ? (
+                  {myUserId === postDetail.author.id ? (
                     <DeletePostButton postId={postId} />
                   ) : null}
                 </div>
 
-                {postQuery.data.caption ? (
-                  <Caption caption={postQuery.data.caption} />
+                {postDetail.caption ? (
+                  <Caption caption={postDetail.caption} />
                 ) : null}
 
                 <Separator className="w-full" />
               </div>
 
               <PostComments
-                postDetail={postQuery.data}
+                postDetail={postDetail}
                 isAuthenticated={isAuthenticated}
                 className="min-h-0 flex-1"
               />

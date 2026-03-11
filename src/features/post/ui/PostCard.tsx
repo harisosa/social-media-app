@@ -32,7 +32,6 @@ export const PostCard = ({
   likeCount,
   commentCount,
   isSaved,
-  isLikePending = false,
   isSavePending = false,
   onOpenComments,
   onShare,

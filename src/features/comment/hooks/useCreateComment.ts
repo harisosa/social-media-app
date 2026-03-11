@@ -1,28 +1,25 @@
 "use client"
 
-import { InfiniteData, useMutation } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
-import type { PostModel } from "@/features/post/types"
-import { PostComment, PostCommentsResponse } from "@/features/comment/types"
 import { createComment } from "@/features/comment/api/api"
-import { commentsQueryKeys } from "@/features/comment/queryKeys"
-import { postQueryKeys } from "@/features/post/queryKeys"
-import { queryClient } from "@/lib/query"
+import type { PostComment } from "@/features/comment/types"
+import {
+  applyOptimisticCommentList,
+  getCreateCommentSnapshot,
+  incrementPostDetailCommentCount,
+  replaceOptimisticComment,
+  restoreCreateCommentSnapshot,
+  updateCommentCountCache,
+  type CreateCommentCacheSnapshot,
+} from "@/features/comment/lib"
 import { useMyProfile } from "@/features/user/hooks"
-import { LIMIT_PAGE } from "@/constants"
-import { appToast } from "@/lib/toast"
-
-
-type MutationContext = {
-  previousComments?: InfiniteData<PostCommentsResponse>
-  previousPostDetail?: PostModel
-}
 
 export const useCreateComment = (postId: number) => {
-  const {data : profile} =  useMyProfile();
-  const authUser = profile?.profile;
-  
-  return useMutation<PostComment, Error, string, MutationContext>({
+  const { data: profile } = useMyProfile()
+  const authUser = profile?.profile
+
+  return useMutation<PostComment, Error, string, CreateCommentCacheSnapshot>({
     mutationFn: (text) =>
       createComment({
         postId,
@@ -30,126 +27,34 @@ export const useCreateComment = (postId: number) => {
       }),
 
     onMutate: async (text) => {
-      await queryClient.cancelQueries({
-        queryKey: commentsQueryKeys.list(postId, LIMIT_PAGE),
-      })
-
-      await queryClient.cancelQueries({
-        queryKey: postQueryKeys.detail(postId),
-      })
-
-      const previousComments =
-        queryClient.getQueryData<InfiniteData<PostCommentsResponse>>(
-          commentsQueryKeys.list(postId, LIMIT_PAGE)
-        )
-
-      const previousPostDetail = queryClient.getQueryData<PostModel>(
-        postQueryKeys.detail(postId)
-      )
+      const snapshot = getCreateCommentSnapshot(postId)
 
       if (!authUser) {
-        return {
-          previousComments,
-          previousPostDetail,
-        }
+        return snapshot
       }
 
       const optimisticComment: PostComment = {
         id: -Date.now(),
         text,
         createdAt: new Date().toISOString(),
-        author:  authUser,
+        author: authUser,
         isMine: true,
       }
 
-      queryClient.setQueryData<InfiniteData<PostCommentsResponse>>(
-        commentsQueryKeys.list(postId, LIMIT_PAGE),
-        (old) => {
-          if (!old || old.pages.length === 0) {
-            return old
-          }
+      applyOptimisticCommentList(postId, optimisticComment)
+      incrementPostDetailCommentCount(postId, 1)
+      updateCommentCountCache(postId, 1)
 
-          const firstPage = old.pages[0]
-
-          return {
-            ...old,
-            pages: [
-              {
-                ...firstPage,
-                comments: [optimisticComment, ...firstPage.comments],
-                pagination: {
-                  ...firstPage.pagination,
-                  total: firstPage.pagination.total + 1,
-                },
-              },
-              ...old.pages.slice(1),
-            ],
-          }
-        }
-      )
-
-      queryClient.setQueryData<PostModel>(postQueryKeys.detail(postId), (old) => {
-        if (!old) {
-          return old
-        }
-
-        return {
-          ...old,
-          commentCount: old.commentCount + 1,
-        }
-      })
-
-      return {
-        previousComments,
-        previousPostDetail,
-      }
+      return snapshot
     },
 
-    onError: (_error, _text, context) => {
-      if (context?.previousComments) {
-        queryClient.setQueryData(
-          commentsQueryKeys.list(postId, LIMIT_PAGE),
-          context.previousComments
-        )
-      }
-
-      if (context?.previousPostDetail) {
-        queryClient.setQueryData(
-          postQueryKeys.detail(postId),
-          context.previousPostDetail
-        )
-      }
-
-      if(!authUser){
-        appToast.error('Please Login before comment')
-      }
+    onError: (err) => {
+      console.log(err)
+      restoreCreateCommentSnapshot(postId)
     },
 
     onSuccess: (createdComment) => {
-      queryClient.setQueryData<InfiniteData<PostCommentsResponse>>(
-        commentsQueryKeys.list(postId, LIMIT_PAGE),
-        (old) => {
-          if (!old || old.pages.length === 0) {
-            return old
-          }
-
-          const firstPage = old.pages[0]
-
-          return {
-            ...old,
-            pages: [
-              {
-                ...firstPage,
-                comments: [
-                  createdComment,
-                  ...firstPage.comments.filter((comment) => comment.id >= 0),
-                ],
-              },
-              ...old.pages.slice(1),
-            ],
-          }
-        }
-      )
+      replaceOptimisticComment(postId, createdComment)
     },
   })
 }

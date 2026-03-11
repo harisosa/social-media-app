@@ -71,7 +71,7 @@ export const MyProfileComponent = () => {
     dispatch(
       openOverlay({
         type: 'post-detail',
-        payload: { postId: id },
+        payload: { postId: id , isSavePage: activeTab !== 'gallery' },
         size: 'lg',
       })
     )

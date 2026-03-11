@@ -18,6 +18,7 @@ type PostCommentsProps = {
   limit?: number
   className?: string
   isAuthenticated: boolean
+
 }
 
 export const PostComments: React.FC<PostCommentsProps> = ({
@@ -25,6 +26,7 @@ export const PostComments: React.FC<PostCommentsProps> = ({
   limit = LIMIT_PAGE,
   className,
   isAuthenticated,
+
 }) => {
   const commentsQuery = useGetPostComments(postDetail.id, limit)
   const toggleSave = useTogglePostSave()
@@ -33,8 +35,8 @@ export const PostComments: React.FC<PostCommentsProps> = ({
     return commentsQuery.data?.pages.flatMap((page) => page.comments) ?? []
   }, [commentsQuery.data])
 
-  const handleSave = () => {
-    toggleSave.mutate({
+  const handleSave = async () => {
+    await toggleSave.mutate({
       postId: postDetail.id,
       isSaved: postDetail.isSaved,
     })

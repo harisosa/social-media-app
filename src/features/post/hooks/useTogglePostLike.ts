@@ -1,14 +1,13 @@
 "use client";
 
-import { InfiniteData, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { likePost, unlikePost } from "@/features/post/api";
+import { patchTimelineLikeState } from "@/features/post/lib";
 import { postQueryKeys } from "@/features/post/queryKeys";
 import type { TogglePostLikeData } from "@/features/post/types";
 import { timelineQueryKeys } from "@/features/timeline/queryKeys";
-import type { GetPostResponse } from "@/features/timeline/types";
 import { queryClient } from "@/lib/query";
-import { patchTimelineLikeState } from "@/features/post/lib";
 
 type TogglePostLikeParams = {
   postId: number;
@@ -34,7 +33,7 @@ export const useTogglePostLike = () => {
       return likePost({ postId });
     },
 
-    onMutate: async ({ postId }): Promise<TogglePostLikeContext> => {
+    onMutate: async ({ postId }) => {
       await queryClient.cancelQueries({
         queryKey: timelineQueryKeys.all,
       });
@@ -68,7 +67,7 @@ export const useTogglePostLike = () => {
     onSettled: async (_data, _error, { postId }) => {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: [...postQueryKeys.likes(postId)],
+          queryKey: postQueryKeys.likes(postId),
         }),
         queryClient.invalidateQueries({
           queryKey: postQueryKeys.detail(postId),

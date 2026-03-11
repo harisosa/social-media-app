@@ -56,7 +56,7 @@ export const OverlayContainer = () => {
     case "post-detail":
       title = "Post detail"
       description = "View post details and comments."
-      content = <PostDetail postId={payload?.postId as number} />
+      content = <PostDetail postId={payload?.postId as number} isSavePage={payload?.isSavePage as boolean} />
       break
 
     case "likes":
