@@ -6,23 +6,25 @@ type LikeableEntity = {
   likeCount: number;
 };
 
+type PatchTimelineLikeStateParams = {
+  postId: number;
+  liked?: boolean;
+  likeCount?: number;
+};
+
 export const patchTimelineLikeState = <TItem extends LikeableEntity>(
   old: unknown,
-  postId: number,
+  { postId, liked, likeCount }: PatchTimelineLikeStateParams,
 ) => {
   return mapInfiniteCollection<TItem>(old, (item) => {
     if (item.id !== postId) {
       return item;
     }
 
-    const nextLikedByMe = !item.likedByMe;
-
     return {
       ...item,
-      likedByMe: nextLikedByMe,
-      likeCount: nextLikedByMe
-        ? item.likeCount + 1
-        : Math.max(0, item.likeCount - 1),
+      likedByMe: liked ?? item.likedByMe,
+      likeCount: likeCount ?? item.likeCount,
     };
   });
 };

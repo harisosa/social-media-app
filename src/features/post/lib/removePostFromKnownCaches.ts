@@ -2,6 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { LIMIT_PAGE } from "@/constants";
 import { timelineQueryKeys } from "@/features/timeline/queryKeys";
 import { usersQueryKeys } from "@/features/user/queryKeys";
+import { MyProfileResponse } from "@/features/user/types";
 
 import { removePostFromInfiniteData } from "./removePostFromInfiniteData";
 import { updateKnownInfiniteQueries } from "./updateKnownInfiniteQueries";
@@ -33,4 +34,19 @@ export const removePostFromKnownCaches = ({
     queryKeys,
     updater: (old) => removePostFromInfiniteData(old, postId),
   });
+
+  queryClient.setQueryData<MyProfileResponse>(
+    usersQueryKeys.myProfile(),
+    (old) => {
+      if (!old) return old;
+
+      return {
+        ...old,
+        stats: {
+          ...old.stats,
+          posts: Math.max(0, old.stats.posts - 1),
+        },
+      };
+    },
+  );
 };

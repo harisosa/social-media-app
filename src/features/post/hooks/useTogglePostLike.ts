@@ -33,7 +33,7 @@ export const useTogglePostLike = () => {
       return likePost({ postId });
     },
 
-    onMutate: async ({ postId }) => {
+    onMutate: async ({ postId, likedByMe }) => {
       await queryClient.cancelQueries({
         queryKey: timelineQueryKeys.all,
       });
@@ -42,16 +42,14 @@ export const useTogglePostLike = () => {
         queryKey: timelineQueryKeys.all,
       });
 
-      queryClient.setQueriesData(
-        {
-          queryKey: timelineQueryKeys.all,
-        },
-        (old) => patchTimelineLikeState(old, postId),
+      queryClient.setQueriesData({ queryKey: timelineQueryKeys.all }, (old) =>
+        patchTimelineLikeState(old, {
+          postId,
+          liked: !likedByMe,
+        }),
       );
 
-      return {
-        previousTimelineQueries,
-      };
+      return { previousTimelineQueries };
     },
 
     onError: (_error, _variables, context) => {
@@ -62,6 +60,16 @@ export const useTogglePostLike = () => {
       context.previousTimelineQueries.forEach(([queryKey, data]) => {
         queryClient.setQueryData(queryKey, data);
       });
+    },
+
+    onSuccess: (data, { postId }) => {
+      queryClient.setQueriesData({ queryKey: timelineQueryKeys.all }, (old) =>
+        patchTimelineLikeState(old, {
+          postId,
+          liked: data.liked,
+          likeCount: data.likeCount,
+        }),
+      );
     },
 
     onSettled: async (_data, _error, { postId }) => {

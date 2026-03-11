@@ -8,16 +8,34 @@ import { timelineQueryKeys } from "@/features/timeline/queryKeys";
 import { queryClient } from "@/lib/query";
 import { usersQueryKeys } from "@/features/user/queryKeys";
 import { useRouter } from "next/navigation";
+import { MyProfileResponse } from "@/features/user/types";
 
 export const useCreatePost = () => {
-  const route = useRouter()
+  const router = useRouter();
+
   return useMutation({
     mutationFn: (payload: CreatePostPayload) => createPost(payload),
 
     onSuccess: () => {
-        queryClient.invalidateQueries({queryKey:timelineQueryKeys.all})
-        queryClient.invalidateQueries({queryKey:usersQueryKeys.me()})
-        route.push('/timeline')
+      queryClient.setQueryData<MyProfileResponse>(
+        usersQueryKeys.myProfile(),
+        (old) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            stats: {
+              ...old.stats,
+              posts: old.stats.posts + 1,
+            },
+          };
+        }
+      );
+
+      queryClient.invalidateQueries({ queryKey: timelineQueryKeys.all });
+
+      router.push("/timeline");
+
       appToast.success("Post created");
     },
 
