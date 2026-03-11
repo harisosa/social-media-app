@@ -1,6 +1,6 @@
 import { api } from "@/lib/http"
 
-import { CreatePostPayload, PostModel } from "../types"
+import { CreatePostPayload, DeletePostResponse, PostModel } from "../types"
 
 export const getPostDetail = (postId: number) =>
   api<PostModel>({
@@ -24,4 +24,11 @@ export const createPost = async (
       'Content-Type': 'multipart/form-data',
     },
   })
+}
+
+export const deletePost = (postId: number) =>{
+  return api<DeletePostResponse>({
+    method: 'DELETE',
+    url: `/posts/${postId}`,
+})
 }

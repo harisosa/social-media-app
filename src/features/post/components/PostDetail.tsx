@@ -13,6 +13,8 @@ import { Separator } from "@/components/ui/separator"
 import { Caption } from "@/components/ui/caption"
 import { useAppSelector } from "@/lib/hook"
 import { selectIsAuthenticated } from "@/features/auth"
+import { useMyProfile } from "@/features/user/hooks"
+import { DeletePostButton } from "@/features/post/components/DeletePostButton"
 
 
 type PostDetailDialogProps = {
@@ -23,6 +25,8 @@ export const PostDetail: React.FC<PostDetailDialogProps> = ({
   postId
 }) => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const { data: myUsername } = useMyProfile((data) => data.profile.username);
+  const { data: myUserId } = useMyProfile((data) => data.profile.id)
   const router = useRouter();
   const resolvedPostId = postId ?? 0
 
@@ -54,16 +58,24 @@ export const PostDetail: React.FC<PostDetailDialogProps> = ({
           <div className="flex min-h-0 w-full flex-col border-t border-[#181D27] bg-[#0A0D12] lg:w-120 lg:border-l lg:border-t-0">
             <div className="flex flex-col flex-1 overflow-y-auto p-4 gap-4">
               <div className="hidden lg:flex flex-col gap-1">
-                <UserRow
-                  onClick={(username) => {
-                    router.push(`/profile/${username}`)
-                  }}
-                  user={postQuery.data.author} timePost={postQuery.data.createdAt} />
-                <Caption caption={postQuery.data.caption} />
+                <div className="flex">
+                  <UserRow
+                    onClick={(username) => {
+                      if (username === myUsername) {
+                        router.push('/profile')
+                        return
+                      }
+                      router.push(`/profile/${username}`)
+                    }}
+                    user={postQuery.data.author} timePost={postQuery.data.createdAt} />
+                  {myUserId === postQuery.data.author.id && (<DeletePostButton postId={postId} />)}
+
+                </div>
+                {postQuery.data.caption && <Caption caption={postQuery.data.caption} />}
                 <Separator className="w-full" />
               </div>
-                  <PostComments postDetail={postQuery.data} isAuthenticated={isAuthenticated} />
-              
+              <PostComments postDetail={postQuery.data} isAuthenticated={isAuthenticated} />
+
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ export const PostCaption = ({
     <div className="px-1">
       <p className="text-sm leading-6 text-white">
         <span className="mr-2 font-semibold">{username}</span>
-      <Caption caption={caption}/>
+      {caption && <Caption caption={caption}/>}
       </p>
     </div>
   )

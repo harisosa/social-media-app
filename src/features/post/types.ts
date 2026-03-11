@@ -38,3 +38,7 @@ export type CreatePostPayload = {
   image: File
   caption: string
 }
+
+export type DeletePostResponse = {
+  deleted: boolean
+}

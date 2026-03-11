@@ -4,6 +4,8 @@ import { SearchUsersEmpty, UserRowSkeleton } from "@/features/user/ui"
 import { useUserSearch } from "../hooks/useUserSearch"
 import { UserRow } from "../ui/UserRow"
 import { cn } from "@/lib/utils"
+import { useMyProfile } from "@/features/user/hooks"
+import { useRouter } from "next/navigation"
 
 type Props = {
   query: string
@@ -27,6 +29,8 @@ export const SearchUsersPanel = ({
     isFetchingNextPage,
   } = useUserSearch({ q: query })
 
+  const router = useRouter();
+  const { data: myUsername } = useMyProfile((data) => data.profile.username)
   const users = data?.pages.flatMap((page) => page.users) ?? []
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
@@ -80,7 +84,15 @@ export const SearchUsersPanel = ({
                 key={user.id}
                 className="rounded-xl px-2 py-2 hover:bg-white/5"
               >
-                <UserRow user={user} />
+                <UserRow user={user}
+                  onClick={(username) => {
+                    if (username === myUsername) {
+                      router.push('/profile')
+                      return
+                    }
+                    router.push(`/profile/${username}`)
+                  }}
+                />
               </div>
             ))}
 

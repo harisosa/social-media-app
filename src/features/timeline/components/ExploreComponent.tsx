@@ -96,7 +96,7 @@ export const ExploreComponent = () => {
   }
 
   return (
-    <section  className='flex flex-col justify-center w-full'>
+    <section  className='flex flex-col justify-center w-full items-center'>
         <TimelineList
           posts={posts}
           onOpenLikes={handleOpenLikes}

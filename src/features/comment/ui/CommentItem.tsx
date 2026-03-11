@@ -4,6 +4,7 @@ import { UserRow } from "@/features/user/ui"
 import { User } from "@/features/user/types"
 import { Caption } from "@/components/ui/caption"
 import { useRouter } from "next/navigation"
+import { useMyProfile } from "@/features/user/hooks"
 
 type CommentItemProps = {
     author: User,
@@ -19,16 +20,23 @@ export const CommentItem: React.FC<CommentItemProps> = ({
     className,
 }) => {
     const router = useRouter();
+    const { data: myUsername } = useMyProfile((data) => data.profile.username)
     return (
         <div className={className}>
             <div className="flex items-start gap-3 flex-col">
                 <UserRow
-                onClick={(username) => {
-                      router.push(`/profile/${username}`)
-                    }} 
-                user={author} timePost={createdAt}/>
+                    onClick={(username) => {
+                        if (username === myUsername) {
+                            router.push('/profile')
+                            return
+                        }
+                        router.push(`/profile/${username}`)
+                    }}
+                    user={author} timePost={createdAt} />
                 <div className="min-w-0 flex-1">
-                    <Caption caption={text}/>
+                    {
+                        text && <Caption caption={text} />
+                    }
                 </div>
             </div>
         </div>

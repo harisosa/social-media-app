@@ -37,9 +37,10 @@ export const FollowListContent: React.FC<FollowListContentProps> = ({
 }) => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-  const { data: me} = useMyProfile();
+  const { data: myUserId } = useMyProfile((data) => data.profile.id)
+  const { data: myUsername } = useMyProfile((data) => data.profile.username)
   const router = useRouter()
-  
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null)
 
   const users = useMemo(() => {
@@ -84,24 +85,28 @@ export const FollowListContent: React.FC<FollowListContentProps> = ({
           {!isPending && !isError
             ? users.map(user => {
 
-                return (
-                  <div
-                    key={user.id}
-                    className="flex items-center justify-between gap-3 rounded-2xl px-2 py-2"
-                  >
-                    <UserRow
-                      user={user}
-                      onClick={clickedUsername => {
-                        router.push(`/profile/${clickedUsername}`)
-                      }}
-                    />
+              return (
+                <div
+                  key={user.id}
+                  className="flex items-center justify-between gap-3 rounded-2xl px-2 py-2"
+                >
+                  <UserRow
+                    user={user}
+                    onClick={clickedUsername => {
+                      if (clickedUsername === myUsername) {
+                        router.push('/profile')
+                        return
+                      }
+                      router.push(`/profile/${clickedUsername}`)
+                    }}
+                  />
 
-                    {!((me?.profile.id == user.id) || !isAuthenticated)? (
-                      <FollowButton user={user} isFollow={user.isFollowedByMe} />
-                    ) : null}
-                  </div>
-                )
-              })
+                  {!((myUserId == user.id) || !isAuthenticated) ? (
+                    <FollowButton user={user} isFollow={user.isFollowedByMe} />
+                  ) : null}
+                </div>
+              )
+            })
             : null}
 
           {!isPending && !isError && !users.length ? (

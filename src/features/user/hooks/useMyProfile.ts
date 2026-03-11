@@ -5,10 +5,13 @@ import { getMyProfile } from '@/features/user/api'
 import { usersQueryKeys } from '@/features/user/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 
-export const useMyProfile = () => {
+export const useMyProfile = <TData = Awaited<ReturnType<typeof getMyProfile>>>(
+  select?: (data: Awaited<ReturnType<typeof getMyProfile>>) => TData,
+) => {
   return useQuery({
     queryKey: usersQueryKeys.myProfile(),
     staleTime: STALE_TIME,
     queryFn: getMyProfile,
+    select,
   })
 }

@@ -67,10 +67,11 @@ export const PostCard = ({
         onSave={onSave}
       />
 
-      <PostCaption
+      {caption && <PostCaption
         username={author.username}
         caption={caption}
-      />
+      />}
+
     </article>
   )
 }

@@ -9,6 +9,7 @@ import { LIMIT_PAGE } from '@/constants'
 import { useAppSelector } from '@/lib/hook'
 import { selectIsAuthenticated } from '@/features/auth'
 import { FollowButton } from '@/features/follow/components/FollowButton'
+import { useMyProfile } from '@/features/user/hooks'
 
 type LikesListProps = {
   postId: number
@@ -29,9 +30,9 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
   })
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
-  
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
+  const { data: myUsername } = useMyProfile((data) => data.profile.username)
   const users = useMemo(() => {
     return data?.pages.flatMap(page => page.users) ?? []
   }, [data])
@@ -79,10 +80,14 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
                   className="flex items-center justify-between gap-3 rounded-2xl px-2 py-2"
                 >
                   <UserRow onClick={(username) => {
+                    if (username === myUsername) {
+                      router.push('/profile')
+                      return
+                    }
                     router.push(`/profile/${username}`)
                   }} user={user} />
 
-                  {(user.isMe || isAuthenticated)? (
+                  {(user.isMe || isAuthenticated) ? (
                     <FollowButton user={user} isFollow={user.isFollowedByMe} />
                   ) : null}
                 </div>

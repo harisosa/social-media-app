@@ -8,7 +8,6 @@ const MAX_CAPTION_LENGTH = 110
 
 export const Caption: React.FC<{ caption: string, className?: string }> = ({ caption, className }) => {
   const [isExpanded, setIsExpanded] = useState(false)
-
   const isLongCaption = caption.length > MAX_CAPTION_LENGTH
 
   const displayedCaption = useMemo(() => {
@@ -18,6 +17,8 @@ export const Caption: React.FC<{ caption: string, className?: string }> = ({ cap
 
     return `${caption.slice(0, MAX_CAPTION_LENGTH)}...`
   }, [caption, isExpanded, isLongCaption])
+
+
   return (
     <>
       <span className={className}>{displayedCaption}</span>
