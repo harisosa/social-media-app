@@ -1,15 +1,11 @@
 "use client";
 
-import {
-  InfiniteData,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { timelineQueryKeys } from "@/features/timeline/queryKeys";
-import type { GetPostResponse } from "@/features/timeline/types";
-import { TogglePostSaveData } from "@/features/post/types";
-import { savePost, unsavePost } from "@/features/post/api";
+import { useMutation } from "@tanstack/react-query";
+
 import { selectIsAuthenticated } from "@/features/auth";
+import { savePost, unsavePost } from "@/features/post/api";
+import type { TogglePostSaveData } from "@/features/post/types";
+import { timelineQueryKeys } from "@/features/timeline/queryKeys";
 import { useAppSelector } from "@/lib/hook";
 import { queryClient } from "@/lib/query";
 import { appToast } from "@/lib/toast";
@@ -20,13 +16,103 @@ type TogglePostSaveParams = {
 };
 
 type TogglePostSaveContext = {
-  previousTimelineQueries: Array<
-    [readonly unknown[], InfiniteData<GetPostResponse> | undefined]
-  >;
+  previousTimelineQueries: Array<[readonly unknown[], unknown]>;
+};
+
+type SaveableEntity = {
+  id: number;
+  isSaved: boolean;
+};
+
+type InfinitePageWithItems<TItem> = {
+  items: TItem[];
+  pagination?: unknown;
+};
+
+type InfinitePageWithPosts<TItem> = {
+  posts: TItem[];
+  pagination?: unknown;
+};
+
+type InfinitePage<TItem> =
+  | InfinitePageWithItems<TItem>
+  | InfinitePageWithPosts<TItem>;
+
+type InfiniteTimelineData<TItem> = {
+  pages: InfinitePage<TItem>[];
+  pageParams: unknown[];
+};
+
+const hasItems = <TItem,>(
+  page: InfinitePage<TItem>,
+): page is InfinitePageWithItems<TItem> => {
+  return "items" in page && Array.isArray(page.items);
+};
+
+const hasPosts = <TItem,>(
+  page: InfinitePage<TItem>,
+): page is InfinitePageWithPosts<TItem> => {
+  return "posts" in page && Array.isArray(page.posts);
+};
+
+const patchTimelineSaveState = <TItem extends SaveableEntity>(
+  old: unknown,
+  postId: number,
+  isSaved: boolean,
+): InfiniteTimelineData<TItem> | undefined => {
+  if (!old || typeof old !== "object") {
+    return undefined;
+  }
+
+  const data = old as InfiniteTimelineData<TItem>;
+
+  if (!Array.isArray(data.pages)) {
+    return data;
+  }
+
+  return {
+    ...data,
+    pages: data.pages.map((page) => {
+      if (hasItems(page)) {
+        return {
+          ...page,
+          items: page.items.map((item) => {
+            if (item.id !== postId) {
+              return item;
+            }
+
+            return {
+              ...item,
+              isSaved: !isSaved,
+            };
+          }),
+        };
+      }
+
+      if (hasPosts(page)) {
+        return {
+          ...page,
+          posts: page.posts.map((post) => {
+            if (post.id !== postId) {
+              return post;
+            }
+
+            return {
+              ...post,
+              isSaved: !isSaved,
+            };
+          }),
+        };
+      }
+
+      return page;
+    }),
+  };
 };
 
 export const useTogglePostSave = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
+
   return useMutation<
     TogglePostSaveData,
     Error,
@@ -46,38 +132,15 @@ export const useTogglePostSave = () => {
         queryKey: timelineQueryKeys.all,
       });
 
-      const previousTimelineQueries = queryClient.getQueriesData<
-        InfiniteData<GetPostResponse>
-      >({
+      const previousTimelineQueries = queryClient.getQueriesData({
         queryKey: timelineQueryKeys.all,
       });
 
-      queryClient.setQueriesData<InfiniteData<GetPostResponse>>(
+      queryClient.setQueriesData(
         {
           queryKey: timelineQueryKeys.all,
         },
-        (old) => {
-          if (!old) {
-            return old;
-          }
-
-          return {
-            ...old,
-            pages: old.pages.map((page) => ({
-              ...page,
-              items: page.items.map((item) => {
-                if (item.id !== postId) {
-                  return item;
-                }
-
-                return {
-                  ...item,
-                  isSaved: !isSaved,
-                };
-              }),
-            })),
-          };
-        },
+        (old) => patchTimelineSaveState(old, postId, isSaved),
       );
 
       return {

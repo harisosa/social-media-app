@@ -6,7 +6,7 @@ import { useGetPostComments } from '@/features/comment/hooks'
 import { PostComment } from '@/features/comment/types'
 import { CommentListError, CommentSkeleton } from '@/features/comment/ui'
 import { CommentList } from '@/features/comment/ui/CommentList'
-import { useTogglePostLike, useTogglePostSave } from '@/features/post/hooks'
+import { useTogglePostSave } from '@/features/post/hooks'
 import { PostActions } from '@/features/post/ui/post'
 import { cn } from '@/lib/utils'
 import { useInfiniteScroll } from '@/hooks'
@@ -27,19 +27,11 @@ export const PostComments: React.FC<PostCommentsProps> = ({
   isAuthenticated,
 }) => {
   const commentsQuery = useGetPostComments(postDetail.id, limit)
-  const toggleLike = useTogglePostLike()
   const toggleSave = useTogglePostSave()
 
   const comments = useMemo<PostComment[]>(() => {
     return commentsQuery.data?.pages.flatMap((page) => page.comments) ?? []
   }, [commentsQuery.data])
-
-  const handleLike = () => {
-    toggleLike.mutate({
-      postId: postDetail.id,
-      likedByMe: postDetail.likedByMe,
-    })
-  }
 
   const handleSave = () => {
     toggleSave.mutate({
@@ -99,14 +91,12 @@ export const PostComments: React.FC<PostCommentsProps> = ({
         <div className="pt-4">
           <div className="hidden w-full flex-col pb-4 lg:flex">
             <PostActions
+            postId={postDetail.id}
               likedByMe={postDetail.likedByMe}
               likeCount={postDetail.likeCount}
               commentCount={postDetail.commentCount}
               isSaved={postDetail.isSaved}
-              isLikePending={toggleLike.isPending}
               isSavePending={toggleSave.isPending}
-              onLike={handleLike}
-              onOpenLikes={() => {}}
               onOpenComments={() => {}}
               onShare={() => {}}
               onSave={handleSave}

@@ -6,14 +6,12 @@ import { Separator } from "@/components/ui/separator"
 
 type TimelineListProps = {
   posts: PostModel[]
-  onOpenLikes: (postId: number) => void
   onOpenComments: (postId: number) => void
   onShare: (postId: number) => void
 }
 
 export const TimelineList = ({
   posts,
-  onOpenLikes,
   onOpenComments,
   onShare,
 }: TimelineListProps) => {
@@ -24,7 +22,6 @@ export const TimelineList = ({
                 <TimelinePostItem
           
           post={post}
-          onOpenLikes={onOpenLikes}
           onOpenComments={onOpenComments}
           onShare={onShare}
         />

@@ -1,33 +1,30 @@
-import { Bookmark, Heart, MessageCircle, Send } from "lucide-react"
+import { Bookmark, MessageCircle, Send } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useAppSelector } from "@/lib/hook"
 import { selectIsAuthenticated } from "@/features/auth"
+import { LikeButton } from "@/features/post/components/LikeButton"
 
 type PostActionsProps = {
+  postId: number;
   likedByMe: boolean
   likeCount: number
   commentCount: number
   isSaved: boolean
-  isLikePending?: boolean
   isSavePending?: boolean
-  onLike: () => void
-  onOpenLikes: () => void
   onOpenComments: () => void
   onShare: () => void
   onSave: () => void
 }
 
 export const PostActions = ({
+  postId,
   likedByMe,
   likeCount,
   commentCount,
   isSaved,
-  isLikePending = false,
   isSavePending = false,
-  onLike,
-  onOpenLikes,
   onOpenComments,
   onShare,
   onSave,
@@ -36,33 +33,7 @@ export const PostActions = ({
   return (
     <div className="flex items-center justify-between px-1">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1.5">
-          <Button
-            variant="ghost"
-            size="icon"
-            type="button"
-            aria-label="Like post"
-            disabled={isLikePending || !isAuthenticated}
-            onClick={onLike}
-          >
-            <Heart
-
-              className={cn(
-                'size-6',
-                likedByMe && "fill-[#B41759] text-[#B41759]"
-              )}
-            />
-          </Button>
-
-          <Button
-            variant="ghost"
-            type="button"
-            onClick={onOpenLikes}
-            className="h-auto px-0 py-0 text-sm font-semibold leading-none text-white hover:bg-transparent hover:text-white hover:opacity-80 cursor-pointer"
-          >
-            {likeCount}
-          </Button>
-        </div>
+        <LikeButton liked={likedByMe} likeCount={likeCount} postId={postId}/>
 
         <div className="flex items-center gap-1.5">
           <Button

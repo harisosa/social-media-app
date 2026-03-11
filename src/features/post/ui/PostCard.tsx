@@ -5,6 +5,7 @@ import { PostMedia } from "./post/PostMedia"
 import { UserRow } from "@/features/user/ui"
 
 type PostCardProps = {
+  postId: number
   author: User
   createdAt: string
   imageUrl: string
@@ -15,8 +16,6 @@ type PostCardProps = {
   isSaved: boolean
   isLikePending?: boolean
   isSavePending?: boolean
-  onLike: () => void
-  onOpenLikes: () => void
   onOpenComments: () => void
   onShare: () => void
   onSave: () => void
@@ -24,6 +23,7 @@ type PostCardProps = {
 }
 
 export const PostCard = ({
+  postId,
   author,
   createdAt,
   imageUrl,
@@ -34,8 +34,6 @@ export const PostCard = ({
   isSaved,
   isLikePending = false,
   isSavePending = false,
-  onLike,
-  onOpenLikes,
   onOpenComments,
   onShare,
   onSave,
@@ -54,14 +52,13 @@ export const PostCard = ({
       />
 
       <PostActions
+        postId={postId}
         likedByMe={likedByMe}
         likeCount={likeCount}
         commentCount={commentCount}
         isSaved={isSaved}
         isLikePending={isLikePending}
         isSavePending={isSavePending}
-        onLike={onLike}
-        onOpenLikes={onOpenLikes}
         onOpenComments={onOpenComments}
         onShare={onShare}
         onSave={onSave}

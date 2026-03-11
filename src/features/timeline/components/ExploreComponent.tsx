@@ -37,16 +37,6 @@ export const ExploreComponent = () => {
     rootMargin: '200px',
   })
 
-  const handleOpenLikes = (postId: number) => {
-    dispatch(
-      openOverlay({
-        type: 'likes',
-        payload: { postId },
-        size: 'md',
-      })
-    )
-  }
-
   const handleOpenComments = (postId: number) => {
     dispatch(
       openOverlay({
@@ -99,7 +89,6 @@ export const ExploreComponent = () => {
     <section  className='flex flex-col justify-center w-full items-center'>
         <TimelineList
           posts={posts}
-          onOpenLikes={handleOpenLikes}
           onOpenComments={handleOpenComments}
           onShare={handleShare}
         />

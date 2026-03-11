@@ -3,34 +3,26 @@
 import { PostCard } from "@/features/post/ui"
 import type { PostModel } from "@/features/post/types"
 import {
-  useTogglePostLike,
   useTogglePostSave,
 } from "@/features/post/hooks"
 import { useRouter } from "next/navigation"
 
 type TimelinePostItemProps = {
   post: PostModel
-  onOpenLikes: (postId: number) => void
   onOpenComments: (postId: number) => void
   onShare: (postId: number) => void
 }
 
 export const TimelinePostItem = ({
   post,
-  onOpenLikes,
   onOpenComments,
   onShare,
 }: TimelinePostItemProps) => {
   const router = useRouter();
-  const toggleLike = useTogglePostLike()
+
   const toggleSave = useTogglePostSave()
 
-  const handleLike = () => {
-    toggleLike.mutate({
-      postId: post.id,
-      likedByMe: post.likedByMe,
-    })
-  }
+
 
   const handleSave = () => {
     toggleSave.mutate({
@@ -41,6 +33,7 @@ export const TimelinePostItem = ({
 
   return (
     <PostCard
+      postId={post.id}
       author={post.author}
       createdAt={post.createdAt}
       imageUrl={post.imageUrl}
@@ -49,14 +42,12 @@ export const TimelinePostItem = ({
       likeCount={post.likeCount}
       commentCount={post.commentCount}
       isSaved={post.isSaved}
-      isLikePending={toggleLike.isPending}
       isSavePending={toggleSave.isPending}
-      onLike={handleLike}
-      onOpenLikes={() => onOpenLikes(post.id)}
+
       onOpenComments={() => onOpenComments(post.id)}
       onShare={() => onShare(post.id)}
       onSave={handleSave}
-      onClickUser={(username) => {router.push(`/profile/${username}`)}} 
+      onClickUser={(username) => { router.push(`/profile/${username}`) }}
     />
   )
 }

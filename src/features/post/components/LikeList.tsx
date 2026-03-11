@@ -58,6 +58,7 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
 
       <div ref={scrollContainerRef} className="max-h-105 overflow-y-auto">
         <div className="flex flex-col gap-1">
+
           {isPending ? (
             <div className="flex flex-col gap-2">
               {Array.from({ length: 5 }).map((_, index) => (
@@ -72,6 +73,12 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
             </div>
           ) : null}
 
+          {!isPending && !isError && users.length === 0 ? (
+            <div className="py-10 text-center text-sm text-neutral-400">
+              No likes yet
+            </div>
+          ) : null}
+
           {!isPending && !isError
             ? users.map(user => {
               return (
@@ -79,13 +86,16 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
                   key={user.id}
                   className="flex items-center justify-between gap-3 rounded-2xl px-2 py-2"
                 >
-                  <UserRow onClick={(username) => {
-                    if (username === myUsername) {
-                      router.push('/profile')
-                      return
-                    }
-                    router.push(`/profile/${username}`)
-                  }} user={user} />
+                  <UserRow
+                    onClick={(username) => {
+                      if (username === myUsername) {
+                        router.push('/profile')
+                        return
+                      }
+                      router.push(`/profile/${username}`)
+                    }}
+                    user={user}
+                  />
 
                   {(user.isMe || isAuthenticated) ? (
                     <FollowButton user={user} isFollow={user.isFollowedByMe} />
@@ -104,6 +114,7 @@ export const LikesList: React.FC<LikesListProps> = ({ postId }) => {
               Loading...
             </div>
           ) : null}
+
         </div>
       </div>
     </div>
