@@ -15,7 +15,6 @@ import {
 
 import { cn } from "@/lib/utils"
 import { useCreateComment } from "@/features/comment/hooks"
-import { LIMIT_PAGE } from "@/constants"
 
 type CommentTextboxProps = {
   postId: number
@@ -26,14 +25,13 @@ type CommentTextboxProps = {
 
 export const CommentTextbox: React.FC<CommentTextboxProps> = ({
   postId,
-  limit = LIMIT_PAGE,
   className,
   disabled,
 }) => {
   const [text, setText] = React.useState("")
   const inputRef = React.useRef<HTMLInputElement>(null)
 
-  const createComment = useCreateComment(postId, limit)
+  const createComment = useCreateComment(postId)
 
   const trimmedText = text.trim()
   const isDisabled = createComment.isPending || disabled;

@@ -4,13 +4,15 @@ import { CommentItem } from "./CommentItem"
 import { PostComment } from "@/features/comment/types"
 
 type CommentListProps = {
-  comments: PostComment[]
-  className?: string
+  comments: PostComment[];
+  postId: number;
+  className?: string;
 }
 
 export const CommentList: React.FC<CommentListProps> = ({
   comments,
   className,
+  postId,
 }) => {
   if (comments.length === 0) {
     return (
@@ -29,6 +31,8 @@ export const CommentList: React.FC<CommentListProps> = ({
             author={comment.author}
             text={comment.text}
             createdAt={comment.createdAt}
+            commentId={comment.id}
+            postId={postId}
           />
         ))}
       </div>

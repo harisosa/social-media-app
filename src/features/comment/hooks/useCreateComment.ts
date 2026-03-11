@@ -18,9 +18,10 @@ type MutationContext = {
   previousPostDetail?: PostModel
 }
 
-export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => {
+export const useCreateComment = (postId: number) => {
   const {data : profile} =  useMyProfile();
   const authUser = profile?.profile;
+  
   return useMutation<PostComment, Error, string, MutationContext>({
     mutationFn: (text) =>
       createComment({
@@ -30,7 +31,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
 
     onMutate: async (text) => {
       await queryClient.cancelQueries({
-        queryKey: commentsQueryKeys.list(postId, limit),
+        queryKey: commentsQueryKeys.list(postId, LIMIT_PAGE),
       })
 
       await queryClient.cancelQueries({
@@ -39,7 +40,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
 
       const previousComments =
         queryClient.getQueryData<InfiniteData<PostCommentsResponse>>(
-          commentsQueryKeys.list(postId, limit)
+          commentsQueryKeys.list(postId, LIMIT_PAGE)
         )
 
       const previousPostDetail = queryClient.getQueryData<PostModel>(
@@ -62,7 +63,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
       }
 
       queryClient.setQueryData<InfiniteData<PostCommentsResponse>>(
-        commentsQueryKeys.list(postId, limit),
+        commentsQueryKeys.list(postId, LIMIT_PAGE),
         (old) => {
           if (!old || old.pages.length === 0) {
             return old
@@ -107,7 +108,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
     onError: (_error, _text, context) => {
       if (context?.previousComments) {
         queryClient.setQueryData(
-          commentsQueryKeys.list(postId, limit),
+          commentsQueryKeys.list(postId, LIMIT_PAGE),
           context.previousComments
         )
       }
@@ -126,7 +127,7 @@ export const useCreateComment = (postId: number, limit: number = LIMIT_PAGE) => 
 
     onSuccess: (createdComment) => {
       queryClient.setQueryData<InfiniteData<PostCommentsResponse>>(
-        commentsQueryKeys.list(postId, limit),
+        commentsQueryKeys.list(postId, LIMIT_PAGE),
         (old) => {
           if (!old || old.pages.length === 0) {
             return old

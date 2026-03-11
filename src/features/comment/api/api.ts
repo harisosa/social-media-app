@@ -1,4 +1,4 @@
-import { CreateCommentPayload, GetPostCommentsParams, PostComment, PostCommentsResponse } from "@/features/comment/types";
+import { CreateCommentPayload, DeleteCommentResponse, GetPostCommentsParams, PostComment, PostCommentsResponse } from "@/features/comment/types";
 import { api } from "@/lib/http";
 
   export const getPostComments = ({ postId, page, limit }: GetPostCommentsParams) =>
@@ -20,3 +20,10 @@ export const createComment = ({ postId, text }: CreateCommentPayload) =>
       text,
     },
   })
+
+  export const deleteComment = async (commentId: number) => {
+  return api<DeleteCommentResponse>({
+    method: "DELETE",
+    url: `/comments/${commentId}`,
+  })
+}

@@ -83,9 +83,9 @@ export const PostComments: React.FC<PostCommentsProps> = ({
     >
       <h2 className="text-md font-bold">Comments</h2>
 
-      <div className="min-h-[37vh] overflow-y-auto pt-4">
+      <div className="h-[37vh] overflow-y-auto pt-4">
         <div className="space-y-4">
-          <CommentList comments={comments} />
+          <CommentList comments={comments} postId={postDetail.id}/>
 
           {commentsQuery.isFetchingNextPage ? <CommentSkeleton /> : null}
 

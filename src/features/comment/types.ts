@@ -23,3 +23,8 @@ export type CreateCommentPayload = {
 export type GetPostCommentsParams = PaginationParams & {
   postId: number
 }
+
+
+export type DeleteCommentResponse = {
+   deleted: boolean
+}
