@@ -30,7 +30,7 @@ export const DeletePostButton = ({
   const dispatch = useAppDispatch()
 
   const handleDelete = async () => {
-    await deleteMutation.mutate(postId);
+     deleteMutation.mutate(postId)
     dispatch(closeOverlay())
   }
 

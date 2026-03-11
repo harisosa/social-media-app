@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import { CommentTextbox } from '@/features/comment/components/CommentTextbox'
 import { useGetPostComments } from '@/features/comment/hooks'
 import { PostComment } from '@/features/comment/types'
@@ -30,7 +30,9 @@ export const PostComments: React.FC<PostCommentsProps> = ({
   const toggleLike = useTogglePostLike()
   const toggleSave = useTogglePostSave()
 
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null)
+  const comments = useMemo<PostComment[]>(() => {
+    return commentsQuery.data?.pages.flatMap((page) => page.comments) ?? []
+  }, [commentsQuery.data])
 
   const handleLike = () => {
     toggleLike.mutate({
@@ -45,10 +47,6 @@ export const PostComments: React.FC<PostCommentsProps> = ({
       isSaved: postDetail.isSaved,
     })
   }
-
-  const comments = useMemo<PostComment[]>(() => {
-    return commentsQuery.data?.pages.flatMap(page => page.comments) ?? []
-  }, [commentsQuery.data])
 
   const { sentinelRef } = useInfiniteScroll({
     enabled:
@@ -77,10 +75,16 @@ export const PostComments: React.FC<PostCommentsProps> = ({
   }
 
   return (
-    <div className={cn('flex min-h-80 flex-col lg:h-full gap-4', className)}>
-      <h2 className='text-md font-[700]'>Comments</h2>
-      <div ref={scrollContainerRef} className="flex-1 ">
-        <div className="space-y-4 overflow-auto  h-115 ">
+    <div
+      className={cn(
+        'grid h-full min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)_auto]',
+        className
+      )}
+    >
+      <h2 className="text-md font-bold">Comments</h2>
+
+      <div className="min-h-[37vh] overflow-y-auto pt-4">
+        <div className="space-y-4">
           <CommentList comments={comments} />
 
           {commentsQuery.isFetchingNextPage ? <CommentSkeleton /> : null}
@@ -91,31 +95,27 @@ export const PostComments: React.FC<PostCommentsProps> = ({
         </div>
       </div>
 
-      {
-        isAuthenticated && (
-          <div className="flex flex-col gap-4">
-            <div className="hidden w-full flex-col lg:flex">
-              <PostActions
-                likedByMe={postDetail.likedByMe}
-                likeCount={postDetail.likeCount}
-                commentCount={postDetail.commentCount}
-                isSaved={postDetail.isSaved}
-                isLikePending={toggleLike.isPending}
-                isSavePending={toggleSave.isPending}
-                onLike={handleLike}
-                onOpenLikes={() => { }}
-                onOpenComments={() => { }}
-                onShare={() => { }}
-                onSave={handleSave}
-              />
-            </div>
-
-            <CommentTextbox postId={postDetail.id} limit={limit} />
+      {isAuthenticated ? (
+        <div className="pt-4">
+          <div className="hidden w-full flex-col pb-4 lg:flex">
+            <PostActions
+              likedByMe={postDetail.likedByMe}
+              likeCount={postDetail.likeCount}
+              commentCount={postDetail.commentCount}
+              isSaved={postDetail.isSaved}
+              isLikePending={toggleLike.isPending}
+              isSavePending={toggleSave.isPending}
+              onLike={handleLike}
+              onOpenLikes={() => {}}
+              onOpenComments={() => {}}
+              onShare={() => {}}
+              onSave={handleSave}
+            />
           </div>
 
-        )
-      }
-
+          <CommentTextbox postId={postDetail.id} limit={limit} />
+        </div>
+      ) : null}
     </div>
   )
 }
