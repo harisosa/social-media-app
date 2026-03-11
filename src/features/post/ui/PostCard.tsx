@@ -57,7 +57,6 @@ export const PostCard = ({
         likeCount={likeCount}
         commentCount={commentCount}
         isSaved={isSaved}
-        isLikePending={isLikePending}
         isSavePending={isSavePending}
         onOpenComments={onOpenComments}
         onShare={onShare}
